@@ -1,0 +1,69 @@
+{
+    "camera": {
+        "fov": 60,
+        "near": 1,
+        "far": 10000,
+        "limit": 80,
+        "position": {
+            "x": 0,
+            "y": 100,
+            "z": 200
+        }
+    },
+    "renderer": {
+        "alpha": false,
+        "antialias": true,
+        "sortObjects": false,
+        "shadowMap": {
+            "enabled": true
+        }
+    },
+    "game": {
+        "time": {
+            "max": 60000,
+            "min": 0,
+            "levels": 6,
+            "resetDuration": 0.5,
+            "extend": 5000
+        },
+        "levels": {
+            "max": 5,
+            "timeIncrease": 20,
+            "rowIncrease": 5,
+            "columnIncrease": 5
+        }
+    },
+    "models": {
+        "cell": {
+            "size": 30,
+            "steps": 2,
+            "depth": 10,
+            "bevelTeickness": 1,
+            "bevelSize": 1,
+            "bevelOffset": 0,
+            "bevelSegments": 1
+        },
+        "table": {
+            "grid": {
+                "rows": 6,
+                "columns": 6
+            }
+        },
+        "blocks": {
+            "def": {
+                "count": 2
+            },
+            "types": {
+                "short": {
+                    "count": 2
+                },
+                "medium": {
+                    "count": 3
+                },
+                "long": {
+                    "count": 3
+                }
+            }
+        }
+    }
+}

@@ -1,17 +1,17 @@
 {
     "camera": {
-        "fov": 60,
+        "fov": 45,
         "near": 1,
-        "far": 10000,
+        "far": 1500,
         "limit": 80,
         "position": {
             "x": 0,
-            "y": 100,
+            "y": -300,
             "z": 200
         }
     },
     "renderer": {
-        "alpha": false,
+        "alpha": true,
         "antialias": true,
         "sortObjects": false,
         "shadowMap": {
@@ -19,6 +19,13 @@
         }
     },
     "game": {
+        "colors": [
+            "#FFCB30", "#C0564B", "#00BAA2",
+            "#FF49B6", "#00D7FD", "#9DB700",
+            "#0072CD", "#56423C", "#0066D4",
+            "#FFBDD0", "#344B48", "#B799FF"
+        ],
+        
         "time": {
             "max": 60000,
             "min": 0,
@@ -26,42 +33,106 @@
             "resetDuration": 0.5,
             "extend": 5000
         },
-        "levels": {
+        "level": {
             "max": 5,
-            "timeIncrease": 20,
-            "rowIncrease": 5,
-            "columnIncrease": 5
+            "current": 1,
+            "moves": {
+                "optimal": 3,
+                "byLevel": 1
+            },
+            "cells": {
+                "available": 0.4,
+                "byLevel": 1
+            }
         }
     },
     "models": {
         "cell": {
             "size": 30,
             "steps": 2,
-            "depth": 10,
-            "bevelTeickness": 1,
-            "bevelSize": 1,
-            "bevelOffset": 0,
-            "bevelSegments": 1
+            "depth": 5,
+            "material": {
+                "color": "#ffaa99"
+            },
+            "text": {
+                "size": 15,
+                "height": 1,
+                "curveSegments": 1,
+                "bevelEnabled": false,
+                "bevelThickness": 1,
+                "bevelSize": 1,
+                "bevelOffset": 0,
+                "bevelSegments": 1
+            }
         },
-        "table": {
+        "board": {
+            "position": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+            },
             "grid": {
                 "rows": 6,
                 "columns": 6
+            },
+            "cell": {
+                "depth": 10,
+                "material": {
+                    "color": "#998899"
+                }
+            }
+        },
+        "goal": {
+            "position": {
+                "edge": "top",
+                "at": 0.5
+            },
+            "cell": {
+                "depth": 10
+            },
+            "grid": {
+                "rows": 1,
+                "columns": 2
             }
         },
         "blocks": {
             "def": {
-                "count": 2
+                "presense": 2,
+                "count": 2,
+                "direction": 1,
+                "position": {},
+                "cell": {
+                    "material": {
+                        "color": "#112211"
+                    }
+                }
             },
             "types": {
-                "short": {
-                    "count": 2
+                "leader": {
+                    "direction": 1,
+                    "presense": 1,
+                    "count": 2,
+                    "cell": {
+                        "material": {
+                            "color": "#ffff00"
+                        }
+                    }
                 },
-                "medium": {
-                    "count": 3
+                "horizontal": {
+                    "count": [2, 3],
+                    "cell": {
+                        "material": {
+                            "color": "#77ff77"
+                        }
+                    }
                 },
-                "long": {
-                    "count": 3
+                "vertical": {
+                    "count": [2, 3],
+                    "cell": {
+                        "material": {
+                            "color": "#2222ff"
+                        }
+                    }
                 }
             }
         }

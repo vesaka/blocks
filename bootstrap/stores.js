@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import api from '$core/services/wp-api.js';
 import { raw, extend } from '$core/utils/object.js';
+import { game } from '$blocks/config/options.json';
 
 export const useAuthStore = defineStore('$auth$', {
     state: () => ({
@@ -46,11 +47,7 @@ export const useGameStore = defineStore('game', {
             players: [],
             fullscreen: false,
             sound: true,
-            streak: {
-                min: 1,
-                max: 10,
-                current: 1,
-            },
+            level: raw(game.level),
             log: {
                 start: '',
                 end: '',
@@ -84,14 +81,10 @@ export const useGameStore = defineStore('game', {
         }
     },
     getters: {
-        currentTime(state) {
-            return Math.round(state.time.current / 1000).toFixed(0);
-        },
-        getTimeProgress(state) {
-            return (state.time.current / state.time.max).toFixed(2) * 100;
-        },
-        timeOver(state) {
-            return state.time.current <= state.time.min;
+        levelOptions({ level: { moves, current } }) {
+            return {
+                moves: moves.optimal + current * moves.byLevel,
+            };
         },
         gameIs(state) {
             return (status) => {
@@ -100,10 +93,6 @@ export const useGameStore = defineStore('game', {
         }
     },
     persist: {
-        enabled: true,
-        strategies: [
-            { storage: sessionStorage, paths: ['sound', 'players'] },
-            { storage: localStorage, paths: ['sound', 'players'] },
-          ],
+        enabled: false,
     }
 });

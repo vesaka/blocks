@@ -103,7 +103,6 @@ class Pointer extends Container {
         if (this.drag) {
             //this.onMove(ev);
         }
-        //console.log(ev);
     }
     
     updatePointer(ev) {
@@ -131,7 +130,7 @@ class Pointer extends Container {
             axis.end.set(position.x, table.height*2, position.z);
         } else if ('x' === this.direction){
             plane.normal.set(1, 0, 0);
-            this.constant = view.width / 2;
+            this.constant = -view.width / 2;
             
             axis.start.set(-table.width, position.y + at.y, position.z);
             axis.end.set(table.width*2, position.y, position.z);

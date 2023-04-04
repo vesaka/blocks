@@ -1,17 +1,18 @@
 import Collection from '$core/models/collection';
 import { Object3D, Raycaster, Vector2 } from 'three';
 
-import Cell from '$blocks/models/cell';
+import Cell from '$blocks/models/cells/cell';
 import Block from './block';
 
 import StatesMixin from '$core/mixins/states-mixin';
 import HistoryMixin from '$core/mixins/history-mixin';
-import { extend } from '$core/utils/object';
+import { extend, raw } from '$core/utils/object';
 import { rand } from '$core/utils/math';
 
 import MainBlock from './main-block';
 import HorizontalBlock from './horizontal-block';
 import VerticalBlock from './vertical-block';
+import Grid from '$blocks/system/grid';
 
 const MAP = {
     main: MainBlock,
@@ -33,16 +34,14 @@ class Blocks extends Collection {
         this.ray = new Vector2;
         this.raycaster = new Raycaster;
         this.activeBlock = null;
-        this.createItems();
+        this.placeItems();
+
+
     }
 
     createItems() {
-        const {def, types, table, path, raycaster, ray} = this;
-        
-        const cellsToFill = rand(
-            Math.round(table.count / 2),
-            table.count - Math.min(table.rows, table.columns)*2
-        );
+        const {def, types, path} = this;
+
 
         for (let name in types) {
             const blockClass = MAP[name];
@@ -53,26 +52,67 @@ class Blocks extends Collection {
             blockOptions.path = path;
             blockOptions.type = name;
             blockOptions.mixins = [StatesMixin, HistoryMixin];
-            
-            const block = new blockClass(blockOptions);
-            if ('leader' === name) {
+
+            let count = blockOptions.count;
+            if (Array.isArray(count)) {
+                count = rand(count[0], count[1]);
+            }
+
+
+            for (let i = 0; i < count; i++) {
+                const block = new blockClass(blockOptions);
                 this.add(block);
             }
+
 
         }
 
     }
-    
+
     clearItems() {
-        
+        const {table} = this;
+
+    }
+    placeItems() {
+        const grid = new Grid({path: this.path});
+        const placements = grid.generate();
+        placements.forEach(p => this.createItem(p));
+
+    }
+
+    generateGrid() {
+
+
+    }
+
+    createItem(options) {
+        const {def, types} = this;
+        const typeKeys = Object.keys(types);
+        const name = 1 === options.id
+                ? typeKeys[0]
+                : (options.straight ? typeKeys[1] : typeKeys[2])
+
+        const blockClass = MAP[name];
+        if (!blockClass) {
+            return;
+        }
+
+        const typeOptions = extend(raw(types[name]), options);
+        const opts = extend(def, typeOptions);
+        opts.type = name;
+        opts.mixins = [StatesMixin, HistoryMixin];
+
+        const block = new blockClass(opts);
+        this.add(block);
+
     }
 
     pointer_start(point) {
         this.updateRay(point);
         const {camera, ray, raycaster} = this;
-        
-        raycaster.setFromCamera( ray, camera );
-        
+
+        raycaster.setFromCamera(ray, camera);
+
         let cross = null;
         this.each(block => {
             const crosses = raycaster.intersectObject(block.model);
@@ -83,14 +123,14 @@ class Blocks extends Collection {
                 }
             }
         });
-        
+
         if (this.activeBlock) {
             this.activeBlock.grab(cross);
         }
     }
-    
+
     pointer_drag() {
-        
+
     }
 
     pointer_stop(point) {
@@ -98,7 +138,7 @@ class Blocks extends Collection {
             this.activeBlock.release();
             this.activeBlock = null;
         }
-        
+
         this.updateRay(point);
     }
 

@@ -7,7 +7,7 @@ import {
 } from 'three';
 
 import Box from '$blocks/models/box';
-import Cell from '$blocks/models/cell';
+import Cell from '$blocks/models/cells/cell';
 import Pointer from '$blocks/system/pointer';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import { extend } from '$core/utils/object';
@@ -62,9 +62,9 @@ class BlocksGame extends Game3D {
     }
     
     createLights() {
-        const hemisphereLight = new HemisphereLight( 0xffffff, 0xff8800, 1);
+        const hemisphereLight = new HemisphereLight( 0x444444, 0x999999, 1);
         const hemisphereLightHelper = new HemisphereLightHelper(hemisphereLight, 5);
-        this.scene.add(hemisphereLight,hemisphereLightHelper);
+        this.scene.add(hemisphereLight);
     }
     
     createBlocks() {

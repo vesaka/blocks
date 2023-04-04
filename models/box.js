@@ -7,9 +7,9 @@ import { Font } from 'three/addons/loaders/FontLoader.js';
 import { extend } from '$core/utils/object';
 
 import Board from './board';
-import Blocks from './blocks/blocks';
+import Blocks from './blocks/blocks.js';
 import Goal from './goal';
-import Cell from './cell';
+import Cell from './cells/cell';
 
 class Box extends Model {
     
@@ -21,20 +21,21 @@ class Box extends Model {
         this.$listen({
             level: ['start', 'end'],
             pointer: ['start', 'drag', 'stop', 'out'],
-            lucky: ['loaded'],
+           // lucky: ['loaded'],
         });
         
         
         const { grid } = this.board;
         this.$set('table', new Matrix(extend(grid, {
-            width: Cell.def.size * grid.rows,
-            height: Cell.def.size * grid.columns,
+            width: Cell.def.size * grid.columns,
+            height: Cell.def.size * grid.rows,
         })));
         
         this.createBoard();
         this.createGoal();
         this.createBlocks();
         this.model.rotation.z = Math.PI*0.25;
+        
     }
     
     createModel() {
@@ -44,11 +45,11 @@ class Box extends Model {
     createBoard() {
         const { options, table, box } = this;
         const board = new Board(options.models.board);
-        
+
         this.setPosition(
-                -table.width / 2 + Cell.halfSize,
-                -table.height / 2 + Cell.halfSize,
-                0
+                -table.width / 2 + Cell.def.size*2,
+                -table.height,
+                75
         );
 
         this.add(board);
@@ -59,13 +60,12 @@ class Box extends Model {
     createGoal() {
         const goal = new Goal(this.goal);
         const { table } = this;
-        table.eachSlot(slot => {
-            if (slot.ax === goal.model.position.x) {              
-                if (!this.path) {
-                    this.path = slot.x;
-                }
-            }
+        const axis = goal.getAxis();
+        const slot = table.firstSlot(slot => {
+            return slot.ax === goal.model.position.x;
         });
+        
+        this.path = slot[axis];
         this.add(goal);
         this.$set('goal', goal);
     }
@@ -73,11 +73,19 @@ class Box extends Model {
     createBlocks() {
         this.blocks.path = this.path;
         const blocks = new Blocks(this.blocks);
+        
         blocks.each(block => {
            this.model.add(block.model) 
         });
         
         this.$blocks = blocks;
+    }
+    
+    clearBlocks() {
+        this.$blocks.each(block => {
+           this.model.remove(block.model);
+           
+        });
     }
     
     add(obj) {
@@ -113,7 +121,7 @@ class Box extends Model {
             const mesh = new Mesh(textGeometry, material);
 
             mesh.position.set(slot.ax - halfSize, slot.ay, -halfSize);
-            //mesh.rotation.x = Math.PI/2;
+            mesh.rotation.x = Math.PI/2;
             model.add(mesh);
         });
     }

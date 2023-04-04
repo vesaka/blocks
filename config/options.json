@@ -77,6 +77,7 @@
             },
             "cell": {
                 "depth": 10,
+                "colors": ["#444444", "#999999"],
                 "material": {
                     "color": "#998899"
                 }
@@ -114,12 +115,11 @@
                     "count": 2,
                     "cell": {
                         "material": {
-                            "color": "#ffff00"
+                            "color": "#ff5500"
                         }
                     }
                 },
                 "horizontal": {
-                    "count": [2, 3],
                     "cell": {
                         "material": {
                             "color": "#77ff77"
@@ -127,10 +127,9 @@
                     }
                 },
                 "vertical": {
-                    "count": [2, 3],
                     "cell": {
                         "material": {
-                            "color": "#2222ff"
+                            "color": "#7777ff"
                         }
                     }
                 }

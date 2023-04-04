@@ -1,6 +1,9 @@
 import Model from '$core/3d/models/three-model';
-import { Object3D, Raycaster, Vector2, Vector3, Box3,MathUtils } from 'three';
-import Cell from '$blocks/models/cell';
+import { Object3D, Raycaster,
+    Mesh, MeshPhongMaterial, Vector2, Vector3, Box3, MathUtils } from 'three';
+import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry';
+
+import Cell from '$blocks/models/cells/cell';
 
 export const IDLE = 'idle';
 export const ACTIVE = 'active';
@@ -12,15 +15,15 @@ export const Vertical = 'vertical';
 export const X = 'x';
 export const Y = 'y';
 
-import { extend } from '$core/utils/object';
+import { extend, raw } from '$core/utils/object';
 import { round, rand } from '$core/utils/math';
 import { rectOverlapsRect } from '$core/2d/utils/intersections';
 class Block extends Model {
     constructor(options) {
         super(options);
-
         this.$listen({
             pointer: ['start', 'move', 'stop', 'out'],
+            //lucky: ['loaded'],
         });
         
         this.box = new Box3().setFromObject(this.model);
@@ -28,21 +31,21 @@ class Block extends Model {
         
         this.start = new Vector3;
         this.bookSlots();
-        
     }
     
     filter_count(count) {
         if (Array.isArray(count)) {
             count = rand(count[0], count[1]);
         }
-        
+
         return count;
     }
     
     filter_position(position) {
         const { table, path, axis, cross } = this;
-        position[cross] = path * Cell.def.size;
-        position[axis] = 4 * Cell.def.size;
+
+        position.x = Cell.def.size * position.x;
+        position.y = Cell.def.size * position.y;
         position.z = Cell.def.depth * 2;
 
         return position;
@@ -50,13 +53,14 @@ class Block extends Model {
     
     createModel() {
         const model = new Object3D;
-        const { count, cell, direction, axis } = this;
+        const { id, count, cell, direction, axis } = this;
         const { size, depth } = Cell.def;
         
         const xAxis = Number(X === axis);
         const yAxis = Number(Y === axis);
         for (let i = 0; i < count; i++) {
             const cellOptions = extend(cell, {
+                id,
                 position: {
                     x: size * xAxis * i,
                     y: size * yAxis * i,
@@ -85,9 +89,9 @@ class Block extends Model {
             return;
         }
 
-        const { table, model, direction, camera, at, axis} = this;
+        const { model, camera, at, axis} = this;
 
-        const { min, max } = this.getRange(direction);
+        const { min, max } = this.range;
         model.position[axis] = MathUtils.clamp(Math.round(target[axis]) - at[axis], min, max );
     }
     
@@ -98,8 +102,7 @@ class Block extends Model {
 
         this.setState(ACTIVE);
         this.$listen({pointer: ['drag']});
-        const { table, model, direction} = this;
-        
+        this.range = this.getRange();
         
         this.$emit('block_grabed', this);
         
@@ -113,8 +116,10 @@ class Block extends Model {
 
         const attribute = this.getDirection();
         model.position[axis] = round(model.position[axis], Cell.def.size);
+        this.range = {};
+        this.releaseSlots().bookSlots();
         this.$off('pointer_drag');
-        
+        this.$emit('block_released');
         
     }
     
@@ -163,7 +168,7 @@ class Block extends Model {
     }
     
     bookSlots() {
-        const { count, table, size, direction, model: { position } } = this;
+        const { id, count, table, size, direction, model: { position } } = this;
         const rect = {
             x1: position.x,
             y1: position.y,
@@ -181,13 +186,51 @@ class Block extends Model {
 
             if(slot.available && rectOverlapsRect(rect, slotRect)) {
                 slot.available = false;
-                this.slots.push([slot.x, slot.y]);
+                slot.takenBy = id;
+                this.slots.push({x: slot.x, y: slot.y});
             }
 
         });
+        return this;
     }
     
     releaseSlots() {
+        const { id, table } = this;
+        this.slots = [];
+        table.eachSlot(slot => {
+            if (id === slot.takenBy) {
+                slot.available = true;
+                slot.takenBy = 0;
+            }
+        });
+        return this;
+    }
+    
+    lucky_loaded(font) {
+        const { text, size } = Cell.def;
+        const { model } = this;
+        const halfSize = size / 2;
+        const $text = raw(text);
+        $text.font = new Font(font);
+
+        const textGeometry = new TextGeometry(`${x}${y}`, $text);
+        const material = new MeshPhongMaterial({
+            color: 0xbbbbbb,
+            transparent: true,
+            opacity: 0.95,
+        });
+        
+        model.children.forEach(cell => {
+            const mesh = new Mesh(textGeometry, material);
+            mesh.position.set(0, cell.y, -halfSize);
+            mesh.rotation.x = Math.PI/2;
+            this.model.add(mesh)
+        });
+        
+            
+//
+            //mesh.rotation.x = Math.PI/2;
+            //model.add(mesh);
         
     }
     

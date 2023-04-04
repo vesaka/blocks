@@ -3,7 +3,7 @@ import Matrix from '$core/2d/grids/matrix';
 import { Object3D } from 'three';
 import { extend, isObject } from '$core/utils/object';
 
-import Cell from './cell';
+import Cell from '$blocks/models/cells/cell';
 
 class Goal extends Model {
     constructor(options) {
@@ -13,8 +13,18 @@ class Goal extends Model {
             pointer: ['start', 'drag', 'end', 'out']
         });
 
-        
-        console.log(this.position);
+    }
+    
+    getAxis() {
+        return this.isHorizontal() ? 'x' : 'y';
+    }
+    
+    get axis() {
+        return this.isHorizontal() ? 'x' : 'y';
+    }
+    
+    get cross() {
+        return this.isHorizontal() ? 'y' : 'x';
     }
 
     filter_position(position) {
@@ -28,29 +38,29 @@ class Goal extends Model {
                 atX = Math.floor(table.width * at);
                 x = atX - (atX % size);
                 y = -size * 2;
-                grid.rows = 1;
-                grid.columns = 2;
+                grid.rows = 2;
+                grid.columns = 1;
                 break;
             case 'bottom':
                 atX = Math.floor(table.width * at);
                 x = atX - (atX % size);
                 y = table.height;
-                grid.rows = 1;
-                grid.columns = 2;
+                grid.rows = 2;
+                grid.columns = 1;
                 break;
             case 'left':
                 atY = Math.floor(table.height * at);
                 x = -size*2;
                 y = atY - (atY % size);
-                grid.rows = 2;
-                grid.columns = 1;
+                grid.rows = 1;
+                grid.columns = 2;
                 break;
             case 'right':
                 atY = Math.floor(table.height * at);
                 x = table.width;
                 y = atY - (atY % size);
-                grid.rows = 2;
-                grid.columns = 1;
+                grid.rows = 1;
+                grid.columns = 2;
             default:
                 break;
         }
@@ -60,7 +70,7 @@ class Goal extends Model {
             height: size * grid.columns,
             depth: depth
         };
-        
+        this.length = Math.max(grid.rows, grid.columns);
         this.edge = edge;
         this.at = at;
 
@@ -77,8 +87,8 @@ class Goal extends Model {
     createMatrix() {
         const {grid} = this;
         this.matrix = new Matrix(extend(grid, {
-            width: Cell.def.size * grid.rows,
-            height: Cell.def.size * grid.columns,
+            width: Cell.def.size * grid.columns,
+            height: Cell.def.size * grid.rows,
         }));
     }
 
@@ -101,11 +111,11 @@ class Goal extends Model {
     }
     
     isHorizontal() {
-        return this.grid.rows > this.grid.columns;
+        return this.grid.rows < this.grid.columns;
     }
     
     isVertical() {
-        return this.grid.rows < this.grid.columns;
+        return this.grid.rows > this.grid.columns;
     }
     
     getAttributes() {
@@ -115,6 +125,34 @@ class Goal extends Model {
         }
         
         return ['y', 'x', 'height', 'width'];
+    }
+    
+    getRange(prop) {
+        const { table, size, goal, at, model: {position} } = this;
+        
+        const goalSize = goal.size[prop];
+        console.log(goalSize);
+        let min = 0, max = table[prop] - size[prop];
+        goal.resolve({
+            top() {
+                min -= goalSize;
+            },
+            left() {
+                min = -goalSize;
+                max = table.width;
+            },
+            bottom() {
+                min = 0; 
+                max += goalSize;
+            },
+            right() {
+                min = 0;
+                max = table.width + goalSize;
+            }
+        });
+
+        
+        return {min, max};
     }
 }
 

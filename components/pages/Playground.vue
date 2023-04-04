@@ -1,6 +1,5 @@
 <template>
    <div id="gameScreen" class="d-flex position-relative w-100">
-        Let's Play
         <canvas ref="canvas" class="d-flex position-fixed inset-0 -z-20" style="left: 0; right: 0;"></canvas>
     </div>
 </template>

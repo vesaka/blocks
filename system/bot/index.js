@@ -1,8 +1,6 @@
 //import Matrix from '../src/game/core/2d/grids/matrix.js';
 import { generate, rand } from './generator.js';
 import { solve, isSolvable } from './solver.js';
-import puzzles from './puzzles.json' assert { type: 'json' };
-
 
 const get = (name, def = null) => {
     for (let i in process.argv) {

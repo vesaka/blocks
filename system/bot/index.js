@@ -2,8 +2,7 @@
 import { generate, rand } from './generator.js';
 import { solve, isSolvable } from './solver.js';
 import puzzles from './puzzles.json' assert { type: 'json' };
-//import options from '../config/options.json';
-//console.log(puzzles.list[0]);
+
 
 const get = (name, def = null) => {
     for (let i in process.argv) {
@@ -29,8 +28,12 @@ const goal = {axis, length: get('mbs', rand(2, 3))};
 const { grid, blocks } = generate(goal, size, path);
 
 if (isSolvable(blocks, size)) {
-    solve(blocks, size, limit);
+    const moves = solve(blocks, size, limit);
+    if (Array.isArray(moves)) {
+        console.log(JSON.stringify({blocks, grid, moves}));
+    } else {
+        console.warn('Not Solvalble or passed the limit')
+    }
     
-    console.log(JSON.stringify({blocks, grid}));
 }
 console.log(isSolvable(blocks, size));

@@ -158,6 +158,8 @@ class Grid extends Container {
 
         return [grid, pairs];
     }
+    
+    
 }
 
 const compare = (a, b) => {

@@ -75,13 +75,9 @@ class Blocks extends Collection {
     }
     placeItems() {
         const grid = new Grid({path: this.path});
-        const placements = grid.generate();
-        placements.forEach(p => this.createItem(p));
-
-    }
-
-    generateGrid() {
-
+        
+        const { blocks } = this.settings.puzzles.list[1];
+        blocks.forEach(p => this.createItem(p));
 
     }
 
@@ -90,7 +86,7 @@ class Blocks extends Collection {
         const typeKeys = Object.keys(types);
         const name = 1 === options.id
                 ? typeKeys[0]
-                : (options.straight ? typeKeys[1] : typeKeys[2])
+                : (options.orientation === 'horizontal' ? typeKeys[1] : typeKeys[2])
 
         const blockClass = MAP[name];
         if (!blockClass) {
@@ -100,6 +96,8 @@ class Blocks extends Collection {
         const typeOptions = extend(raw(types[name]), options);
         const opts = extend(def, typeOptions);
         opts.type = name;
+        opts.position = { x: options.col, y: options.row};
+        opts.count = options.size;
         opts.mixins = [StatesMixin, HistoryMixin];
 
         const block = new blockClass(opts);

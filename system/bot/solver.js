@@ -13,9 +13,6 @@ export const solve = (blocks, size = 6, limit = 30) => {
         blocks, moves: [], cost: 0
     };
 
-    return;
-
-
 
     const heuristic = (state) => {
         const mainBlock = state.blocks.find(block => block.id === 1);

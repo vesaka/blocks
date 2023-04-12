@@ -2,10 +2,10 @@ export const solve = (blocks, size = 6, limit = 30) => {
     const createGoal = (blocks) => {
         const main = blocks.find(block => block.id === 1);
         const goal = Object.assign({}, main);
-        const middle = size / 2;
+        const middle = Math.floor(size / 2);
 
         const axis = goal.axis === 'x' ? 'col' : 'row';
-        goal[axis] = main[axis] <= middle - main.size ? size - main.size : 0;
+        goal[axis] = main[axis] < middle ? size - 1 : 0;
         return goal;
     }
     const goal = createGoal(blocks);

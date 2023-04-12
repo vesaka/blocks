@@ -131,8 +131,7 @@ export const generate = (goal, size = 6, path = 2) => {
 
         }
         
-        //console.table(grid)
-        return { grid, blocks };
+        return { board: grid, blocks };
 }
 
 const createZeroGridAndPairs = (size) => {

@@ -1,6 +1,7 @@
 //import Matrix from '../src/game/core/2d/grids/matrix.js';
 import { generate, rand } from './generator.js';
-import { solve, isSolvable } from './solver.js';
+import { start } from '../ai/solve.js';
+import { runFunction } from '@guydev/native-python';
 
 const get = (name, def = null) => {
     for (let i in process.argv) {
@@ -23,15 +24,15 @@ const axis = get('axis', 'y');
 const horizontal = 'x' === axis;
 const goal = {axis, length: get('mbs', rand(2, 3))};
 
-const { grid, blocks } = generate(goal, size, path);
 
-if (isSolvable(blocks, size)) {
-    const moves = solve(blocks, size, limit);
-    if (Array.isArray(moves)) {
-        console.log(JSON.stringify({blocks, grid, moves}));
-    } else {
-        console.warn('Not Solvalble or passed the limit')
-    }
-    
-}
-console.log(isSolvable(blocks, size));
+
+const puzzles = [];
+
+const { board, blocks } = generate(goal, size, path);
+
+console.log(start(blocks));
+
+
+
+
+//console.log(JSON.stringify(puzzles));

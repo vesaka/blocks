@@ -76,7 +76,7 @@ class Blocks extends Collection {
     placeItems() {
         const grid = new Grid({path: this.path});
         
-        const { blocks } = this.settings.puzzles.list[1];
+        const { blocks } = this.settings.puzzles.list[2];
         blocks.forEach(p => this.createItem(p));
 
     }

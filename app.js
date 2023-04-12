@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-
+import './style.css';
 import '$lib/assets/css/room-transitions.css';
 import '$lib/assets/css/push-button.css';
 

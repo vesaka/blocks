@@ -86,7 +86,7 @@ function movableDiv(div, bt, bn, bp, sTop, sLeft) {
       window.addEventListener("mousemove", moveFreeDiv);
       window.addEventListener("mouseup", moveFreeUp);
     } else {
-      var minMax = minMaxPos(bp, bt, blocks);
+      var minMax = minMaxPos(bp, bt, blocks);     
       if (bt<2) {
         min  = 100*(minMax[0]%6);
         max  = 100*(minMax[1]%6);
@@ -101,10 +101,13 @@ function movableDiv(div, bt, bn, bp, sTop, sLeft) {
   }
   function mouseUp() {
     var line, col;
+    
     if (bt<2) {
       line = (bp-bp%6)/6;
+      
       col  = Math.round(left/100);
       left = 100*col;
+      
       div.style.left = left+"px";
       window.removeEventListener("mousemove", moveHoDiv);
     } else {
@@ -354,7 +357,7 @@ function showBoard(blocks) {
     });
   }
   
-  console.log(list);
+  
 }
 // Create teh HTML Edit block
 function addEditBlocks() {

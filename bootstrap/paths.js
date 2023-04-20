@@ -5,7 +5,6 @@ export const LOGIN_PATH = '/log-in';
 export const PLAY_PATH = '/playground';
 export const LEADERBOARD = '/leaderboard';
 export const PAGE_404 = '/404';
-export const BLOCKS_MANAGER = '/blocks-manager';
 
 let START = app.url === window.location.host ? window.location.origin + app.theme : '';
 export const svg = path => {

@@ -3,12 +3,11 @@
 const Playground = () => import('$blocks/components/pages/Playground.vue');
 import Leaderboard from '$blocks/components/pages/Leaderboard.vue';
 import Start from '$blocks/components/pages/Start.vue';
-import BlocksManager from '$blocks/components/pages/BlocksManager.vue';
 import NotFound from '$blocks/components/pages/NotFound.vue';
 
 import {
     BASE, LOGIN_PATH, PLAY_PATH, PAGE_404, SIGNUP_PATH,
-    LEADERBOARD, BLOCKS_MANAGER
+    LEADERBOARD
 } from './paths.js';
 
 const routes = [
@@ -55,15 +54,6 @@ const routes = [
         meta: {
             title: 'Leaderboard'        
         }
-    },
-    {
-        path: BLOCKS_MANAGER,
-        name: 'blocks-manager',
-        component: BlocksManager,
-        meta: {
-            title: 'Blocks Manager'
-        }
-        
     },
     {
         path: PAGE_404,

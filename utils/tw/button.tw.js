@@ -16,7 +16,7 @@ export const btnBorder = {
 
 export const btnPrimary = {
     'inline-flex items-center justify-center': true,
-    'bg-primary py-4 px-10': true,
+    'bg-primary py-2 px-10 mr-2': true,
     'text-center text-base font-normal': true,
     'text-white hover:bg-opacity-90 lg:px-8 xl:px-10': true
 };

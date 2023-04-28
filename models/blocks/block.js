@@ -42,8 +42,6 @@ class Block extends Model {
     }
     
     filter_position(position) {
-        const { table, path, axis, cross } = this;
-
         position.x = Cell.def.size * position.x;
         position.y = Cell.def.size * position.y;
         position.z = Cell.def.depth * 2;
@@ -89,7 +87,7 @@ class Block extends Model {
             return;
         }
 
-        const { model, camera, at, axis} = this;
+        const { model, at, axis} = this;
 
         const { min, max } = this.range;
         model.position[axis] = MathUtils.clamp(Math.round(target[axis]) - at[axis], min, max );
@@ -97,8 +95,8 @@ class Block extends Model {
     
     grab(cross) {
         this.at = this.model.worldToLocal(cross.point);
-        this.at.x *= 2;
-        this.at.y *= 2;
+        // this.at.x *= 2;
+        // this.at.y *= 2;
 
         this.setState(ACTIVE);
         this.$listen({pointer: ['drag']});

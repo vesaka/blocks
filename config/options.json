@@ -85,7 +85,7 @@
         },
         "goal": {
             "position": {
-                "edge": "top",
+                "edge": "right",
                 "at": 0.5
             },
             "cell": {

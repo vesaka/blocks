@@ -1,9 +1,14 @@
-import VerticalBlock from './vertical-block';
-import Cell from '$blocks/models/cells/cell';
-class MainBlock extends VerticalBlock {
+import HorizontalBlock from './horizontal-block';
+class MainBlock extends HorizontalBlock {
 
     constructor(options) {
         super(options);
+    }
+
+    filter_position(position) {
+        console.log(position);
+        
+        return super.filter_position(position);
     }
 
     getRange() {

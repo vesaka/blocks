@@ -1,7 +1,7 @@
 import Container from '$core/container';
 import { 
     Raycaster, Plane, PlaneHelper,
-    Vector3, Vector2, MathUtils, Line3
+    Vector3, Vector2, MathUtils, Line3, ArrowHelper
 } from 'three';
 import dat from 'dat.gui';
 
@@ -29,10 +29,12 @@ class Pointer extends Container {
         
         
         this.helper = new PlaneHelper( this.plane, 1000, 0xffbbff );
-
+        
+// this.scene.add(this.helper);
         this.toogleEvents();
         this.axis = new Line3;
-        
+        const arrowHelper = new ArrowHelper(this.axis.start, this.axis.end, 20);
+        this.scene.add(arrowHelper);
     }
     
     level_start() {
@@ -71,6 +73,10 @@ class Pointer extends Container {
         this.updatePlane();
         this.plane.intersectLine(this.axis, this.target);
         this.$emit('pointer_start', this.pointer);
+        this.addEntry({
+            event: 'start',
+            at: this.target
+        });
     }
     
     onMove(ev) {
@@ -80,10 +86,7 @@ class Pointer extends Container {
             this.plane.intersectLine(this.axis, this.target);
             
             this.$emit('pointer_drag', this.target);
-            this.addEntry({
-                event: 'drag',
-                at: this.target
-            });
+            
         }
     }
     
@@ -117,19 +120,34 @@ class Pointer extends Container {
     }
     
     block_grabed(block) {
-        const { plane, pointer, view, table, axis } = this;
+        const { plane, view, table, axis } = this;
         const { at, model: { position } } = block;
         this.direction = block.getDirection();
         this.drag = true;
 
+        // if ('y' === this.direction) {
+        //     plane.normal.set(0, 0.66, 1);
+        //     this.constant = -view.height / 2;
+            
+        //     axis.start.set(position.x + at.x, -table.height, position.z);
+        //     axis.end.set(position.x, table.height*2, position.z);
+        // } else if ('x' === this.direction){
+        //     plane.normal.set(1, 0, 0);
+        //     this.constant = -view.width / 2;
+            
+        //     axis.start.set(-table.width, position.y + at.y, position.z);
+        //     axis.end.set(table.width*2, position.y, position.z);
+        // }
+console.log(table)
         if ('y' === this.direction) {
-            plane.normal.set(0, 0.66, 1);
+            plane.normal.set(1, 0, 0);
+            
             this.constant = -view.height / 2;
             
             axis.start.set(position.x + at.x, -table.height, position.z);
             axis.end.set(position.x, table.height*2, position.z);
         } else if ('x' === this.direction){
-            plane.normal.set(1, 0, 0);
+            plane.normal.set(0, 0.66, 1);
             this.constant = -view.width / 2;
             
             axis.start.set(-table.width, position.y + at.y, position.z);

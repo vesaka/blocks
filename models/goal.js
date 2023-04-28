@@ -58,9 +58,10 @@ class Goal extends Model {
             case 'right':
                 atY = Math.floor(table.height * at);
                 x = table.width;
-                y = atY - (atY % size);
+                y = atY - size;
                 grid.rows = 1;
                 grid.columns = 2;
+                break;
             default:
                 break;
         }
@@ -73,7 +74,7 @@ class Goal extends Model {
         this.length = Math.max(grid.rows, grid.columns);
         this.edge = edge;
         this.at = at;
-
+console.log({ edge, x, y })
         return {x, y, z: 0, edge, at};
     }
     

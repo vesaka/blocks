@@ -2,6 +2,7 @@ import Model from '$core/3d/models/three-model';
 import { Object3D, Mesh, BoxGeometry, MeshPhongMaterial, Box3 } from 'three';
 import Cell from './cells/board-cell';
 import { extend } from '$core/utils/object';
+
 class Board extends Model {
 
     slots = [];

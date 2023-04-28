@@ -1,8 +1,6 @@
 import Collection from '$core/models/collection';
 import { Object3D, Raycaster, Vector2 } from 'three';
 
-import Cell from '$blocks/models/cells/cell';
-import Block from './block';
 
 import StatesMixin from '$core/mixins/states-mixin';
 import HistoryMixin from '$core/mixins/history-mixin';
@@ -13,6 +11,9 @@ import MainBlock from './main-block';
 import HorizontalBlock from './horizontal-block';
 import VerticalBlock from './vertical-block';
 import Grid from '$blocks/system/grid';
+
+import { boards } from '$blocks/config/puzzles.json';
+import { unserialize } from '$core/utils/object';
 
 const MAP = {
     main: MainBlock,
@@ -75,9 +76,11 @@ class Blocks extends Collection {
     }
     placeItems() {
         const grid = new Grid({path: this.path});
-        
-        const { blocks } = this.settings.puzzles.list[2];
-        blocks.forEach(p => this.createItem(p));
+        const board = boards.find(({ solution }) => solution.length >= 15);
+
+        board.blocks.forEach(b => this.createItem(unserialize(b)));
+        //const { blocks } = this.settings.puzzles.list[2];
+        //blocks.forEach(p => this.createItem(p));
 
     }
 

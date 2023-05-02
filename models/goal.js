@@ -74,7 +74,7 @@ class Goal extends Model {
         this.length = Math.max(grid.rows, grid.columns);
         this.edge = edge;
         this.at = at;
-console.log({ edge, x, y })
+        
         return {x, y, z: 0, edge, at};
     }
     

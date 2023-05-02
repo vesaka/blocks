@@ -1,7 +1,9 @@
 import Model from '$core/3d/models/three-model';
-import { Object3D, Raycaster,
-    Mesh, MeshPhongMaterial, Vector2, Vector3, Box3, MathUtils } from 'three';
-import {TextGeometry} from 'three/examples/jsm/geometries/TextGeometry';
+import {
+    Object3D, Raycaster,
+    Mesh, MeshPhongMaterial, Vector2, Vector3, Box3, MathUtils
+} from 'three';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
 import Cell from '$blocks/models/cells/cell';
 
@@ -25,14 +27,14 @@ class Block extends Model {
             pointer: ['start', 'move', 'stop', 'out'],
             //lucky: ['loaded'],
         });
-        
+
         this.box = new Box3().setFromObject(this.model);
         this.slots = [];
-        
+
         this.start = new Vector3;
         this.bookSlots();
     }
-    
+
     filter_count(count) {
         if (Array.isArray(count)) {
             count = rand(count[0], count[1]);
@@ -40,7 +42,7 @@ class Block extends Model {
 
         return count;
     }
-    
+
     filter_position(position) {
         position.x = Cell.def.size * position.x;
         position.y = Cell.def.size * position.y;
@@ -48,12 +50,12 @@ class Block extends Model {
 
         return position;
     }
-    
+
     createModel() {
         const model = new Object3D;
         const { id, count, cell, direction, axis } = this;
         const { size, depth } = Cell.def;
-        
+
         const xAxis = Number(X === axis);
         const yAxis = Number(Y === axis);
         for (let i = 0; i < count; i++) {
@@ -68,48 +70,48 @@ class Block extends Model {
             const blockCell = new Cell(cellOptions);
             model.add(blockCell.model);
         }
-        
+
         this.size = {
-            width: size + size * xAxis * (count-1),
-            height: size + size * yAxis * (count-1),
+            width: size + size * xAxis * (count - 1),
+            height: size + size * yAxis * (count - 1),
             depth: depth
         };
 
         return model;
     }
-    
+
     isLeader() {
         return LEADER === this.type;
     }
-    
+
     pointer_drag(target) {
         if (this.isNot(ACTIVE)) {
             return;
         }
 
-        const { model, at, axis} = this;
+        const { model, at, axis, direction } = this;
 
         const { min, max } = this.range;
-        model.position[axis] = MathUtils.clamp(Math.round(target[axis]) - at[axis], min, max );
+        model.position[axis] = MathUtils.clamp(Math.round(target[axis]) - (at[axis]), min, max);
     }
-    
+
     grab(cross) {
         this.at = this.model.worldToLocal(cross.point);
-        // this.at.x *= 2;
-        // this.at.y *= 2;
+        this.at[this.axis] = (Cell.def.size * this.count + this.at[this.axis]) * 0.5;
+        //this.at.y *= 2;
 
         this.setState(ACTIVE);
-        this.$listen({pointer: ['drag']});
+        this.$listen({ pointer: ['drag'] });
         this.range = this.getRange();
-        
+
         this.$emit('block_grabed', this);
-        
+
     }
-    
+
     release() {
         this.at = null;
         this.setState(IDLE);
-        
+
         const { model, direction, table, axis } = this;
 
         const attribute = this.getDirection();
@@ -118,21 +120,37 @@ class Block extends Model {
         this.releaseSlots().bookSlots();
         this.$off('pointer_drag');
         this.$emit('block_released');
-        
+
     }
-    
-    
+
+    getNormal(origin) {
+        const [first, second] = this.model.children;
+        const line = new Vector3().subVectors(second.worldToLocal(origin.clone()), first.worldToLocal(origin.clone())).normalize();
+
+        //console.log(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3));;
+        return line.normalize();
+    }
+
+    get normal() {
+        const [first, second] = this.model.children;
+        const line = new Vector3().subVectors(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3)).normalize();
+        //line.y = -0.62;
+        //console.log(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3));;
+        return line;
+    }
+
+
     getDirection() {
         return this.axis;
     }
-    
+
     getLimit() {
-        
+
     }
-    
+
     getRange(prop) {
-        const { table, size, goal, at, model: {position} } = this;
-        
+        const { table, size, goal, at, model: { position } } = this;
+
         const goalSize = this.isLeader() ? goal.size[prop] : 0;
         let min = 0, max = table[prop] - size[prop];
         goal.resolve({
@@ -144,7 +162,7 @@ class Block extends Model {
                 max = table.width;
             },
             bottom() {
-                min = 0; 
+                min = 0;
                 max += goalSize;
             },
             right() {
@@ -153,18 +171,18 @@ class Block extends Model {
             }
         });
 
-        
-        return {min, max};
+
+        return { min, max };
     }
-    
+
     isX() {
         return X === this.axis;
     }
-    
+
     isY() {
         return Y === this.axis;
     }
-    
+
     bookSlots() {
         const { id, count, table, size, direction, model: { position } } = this;
         const rect = {
@@ -173,7 +191,7 @@ class Block extends Model {
             x2: position.x + size.width,
             y2: position.y + size.height
         };
-        
+
         table.eachSlot(slot => {
             const slotRect = {
                 x1: slot.ax,
@@ -182,16 +200,16 @@ class Block extends Model {
                 y2: slot.dy
             };
 
-            if(slot.available && rectOverlapsRect(rect, slotRect)) {
+            if (slot.available && rectOverlapsRect(rect, slotRect)) {
                 slot.available = false;
                 slot.takenBy = id;
-                this.slots.push({x: slot.x, y: slot.y});
+                this.slots.push({ x: slot.x, y: slot.y });
             }
 
         });
         return this;
     }
-    
+
     releaseSlots() {
         const { id, table } = this;
         this.slots = [];
@@ -203,7 +221,7 @@ class Block extends Model {
         });
         return this;
     }
-    
+
     lucky_loaded(font) {
         const { text, size } = Cell.def;
         const { model } = this;
@@ -217,21 +235,21 @@ class Block extends Model {
             transparent: true,
             opacity: 0.95,
         });
-        
+
         model.children.forEach(cell => {
             const mesh = new Mesh(textGeometry, material);
             mesh.position.set(0, cell.y, -halfSize);
-            mesh.rotation.x = Math.PI/2;
+            mesh.rotation.x = Math.PI / 2;
             this.model.add(mesh)
         });
-        
-            
-//
-            //mesh.rotation.x = Math.PI/2;
-            //model.add(mesh);
-        
+
+
+        //
+        //mesh.rotation.x = Math.PI/2;
+        //model.add(mesh);
+
     }
-    
+
 }
 
 const map = {

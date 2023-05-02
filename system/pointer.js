@@ -1,9 +1,12 @@
 import Container from '$core/container';
 import { 
     Raycaster, Plane, PlaneHelper,
-    Vector3, Vector2, MathUtils, Line3, ArrowHelper
+    Vector3, Vector2, MathUtils, Line3, ArrowHelper,
+     Line, LineBasicMaterial, BufferGeometry,
+     PlaneGeometry, MeshBasicMaterial, Mesh, LineSegments
 } from 'three';
-import dat from 'dat.gui';
+import Cell from '$blocks/models/cells/cell';
+import GUI from 'lil-gui';
 
 class Pointer extends Container {
     drag = false;
@@ -27,15 +30,80 @@ class Pointer extends Container {
         this.constant = 0;
         this.plane = new Plane( new Vector3, 0 );
         
-        
+        const gui = new GUI;
+        // gui.add(this.plane.normal, 'x', -1, 1, 0.01).name('planeX');
+        // gui.add(this.plane.normal, 'y', -1, 1, 0.01).name('planeY');
+        // gui.add(this.plane.normal, 'z', -1, 1, 0.01).name('planeZ');
+        // gui.add(this.camera.position, 'x', -400, 400, 10).name('cameraX');
+        // gui.add(this.camera.position, 'y', -400, 400, 10).name('cameraY');
+        // gui.add(this.camera.position, 'z', -400, 400, 10).name('cameraZ');
+        // gui.add(this.camera.rotation, 'x', -Math.PI, Math.PI, 0.01).name('cameraRotateX');
+        // gui.add(this.camera.rotation, 'y', -Math.PI, Math.PI, 0.01).name('cameraRotateY');
+        // gui.add(this.camera.rotation, 'z', -Math.PI, Math.PI, 0.01).name('cameraRotateZ');
+        //gui.add(this.plane, 'constant', -800, 800, 10).name('constant');
         this.helper = new PlaneHelper( this.plane, 1000, 0xffbbff );
+        this.arrowHelper = null;
         
-// this.scene.add(this.helper);
+        this.scene.add(this.helper);
         this.toogleEvents();
         this.axis = new Line3;
-        const arrowHelper = new ArrowHelper(this.axis.start, this.axis.end, 20);
-        this.scene.add(arrowHelper);
+
+
+        this.arrowHelper = null;
+        this.createAxises();
+        
+
+        //this.box.model.add(this.scanner)
+        //console.log(this.line.geometry)
+       // console.log(this.line);
     }
+
+
+    createAxises() {
+        const { table, box } = this;
+        this.rows = [];
+        this.cols = [];
+        const hs = Cell.halfSize;
+        const d = Cell.def.depth*2;
+        const size = hs*2;
+        for (let i = 0; i < table.rows; i++) {
+            this.rows.push(new Line3(
+                box.model.localToWorld(new Vector3(-table.width, (i * size) + hs, d)),
+                box.model.localToWorld(new Vector3(table.width*2, (i * size) + hs, d)))
+            );
+        }
+
+        for (let i = 0; i < table.columns; i++) {
+            this.cols.push(new Line3(
+                box.model.localToWorld(new Vector3((i * size) + hs, -table.height, d)),
+                box.model.localToWorld(new Vector3((i * size) + hs, table.height*2, d))));
+        }
+
+    }
+
+    getRowAxis(i, offset) {
+        const axis = this.rows[i].clone();
+        axis.start.y -= Cell.def.size - offset.y;
+        axis.end.y -= Cell.def.size - offset.y;
+        return axis;
+    }
+
+    getColAxis(i, offset) {
+        const axis = this.cols[i].clone();
+        axis.start.x -= Cell.def.size - offset.x;
+        axis.end.x -= Cell.def.size - offset.x;
+        return axis;
+    }
+
+    createLine() {
+        const geometry = new BufferGeometry().setFromPoints( [
+            new Vector3(0, 0, 0), new Vector3(0, 500, 0)
+        ] );
+
+        const line = new Line(geometry, new LineBasicMaterial({ color: 0xff0000 }));
+        return line;
+    }
+    
     
     level_start() {
         const { renderer } = this;
@@ -83,10 +151,11 @@ class Pointer extends Container {
         if (this.drag) {
             this.updatePointer(ev);
             this.updatePlane();
-            this.plane.intersectLine(this.axis, this.target);
-            
-            this.$emit('pointer_drag', this.target);
-            
+            const intersection = this.plane.intersectLine(this.axis, this.target);
+            if (intersection) {
+                this.box.model.worldToLocal(this.target);
+                this.$emit('pointer_drag', this.target);
+            }
         }
     }
     
@@ -111,49 +180,46 @@ class Pointer extends Container {
     updatePointer(ev) {
         this.pointer.x = ( ev.clientX / window.innerWidth ) * 2 - 1;
         this.pointer.y = -( ev.clientY / window.innerHeight ) * 2 + 1;
+        return this;
     }
     
     updatePlane() {
-        const { raycaster, pointer } = this;
+        const { raycaster, pointer, plane, direction } = this;
         raycaster.setFromCamera(pointer, this.camera);
-        this.plane.constant = pointer[this.direction] * this.constant;
+        plane.constant = (pointer[direction] * this.constant);
     }
     
     block_grabed(block) {
-        const { plane, view, table, axis } = this;
-        const { at, model: { position } } = block;
+        const { plane, view, table, axis, pointer } = this;
+        const { at } = block;
+        // at.x *= pointer.x;
+        // at.y *= pointer.y;
         this.direction = block.getDirection();
         this.drag = true;
 
-        // if ('y' === this.direction) {
-        //     plane.normal.set(0, 0.66, 1);
-        //     this.constant = -view.height / 2;
-            
-        //     axis.start.set(position.x + at.x, -table.height, position.z);
-        //     axis.end.set(position.x, table.height*2, position.z);
-        // } else if ('x' === this.direction){
-        //     plane.normal.set(1, 0, 0);
-        //     this.constant = -view.width / 2;
-            
-        //     axis.start.set(-table.width, position.y + at.y, position.z);
-        //     axis.end.set(table.width*2, position.y, position.z);
-        // }
-console.log(table)
-        if ('y' === this.direction) {
-            plane.normal.set(1, 0, 0);
-            
-            this.constant = -view.height / 2;
-            
-            axis.start.set(position.x + at.x, -table.height, position.z);
-            axis.end.set(position.x, table.height*2, position.z);
-        } else if ('x' === this.direction){
-            plane.normal.set(0, 0.66, 1);
-            this.constant = -view.width / 2;
-            
-            axis.start.set(-table.width, position.y + at.y, position.z);
-            axis.end.set(table.width*2, position.y, position.z);
+        if (this.arrowHelper) {
+            this.scene.remove(this.arrowHelper);
         }
 
+        //plane.normal.copy(block.normal);
+        if ('x' === this.direction) {
+            plane.normal.set(1, 0, 0);
+            this.constant = -(view.width) * 0.16;
+            //axis.copy(this.getRowAxis(block.row, at));
+            axis.copy(this.rows[block.row])
+        } else if ('y' === this.direction) {
+            plane.normal.set(0, 0.64, 1);
+            this.constant = -(view.height) * 0.25;
+            //axis.copy(this.getColAxis(block.col, at));
+            axis.copy(this.cols[block.col]);
+
+
+        }
+        //plane.normal.copy(block.normal)
+        // box.model.localToWorld(axis.start);
+        // box.model.localToWorld(axis.end);
+        this.arrowHelper = new ArrowHelper(block.normal, axis.end, table.width*4);
+        this.scene.add(this.arrowHelper)
         this.updatePlane();
         
         this.addEntry({
@@ -169,8 +235,14 @@ console.log(table)
         const fov = MathUtils.degToRad( camera.fov );
         const height = Math.round(2 * Math.tan( fov / 2 ) * (options.camera.far / 2));
         const width = Math.round(height * camera.aspect);
-        
-        return { width, height };
+        let widthRatio = 0.5, heightRatio = 0.5;
+        if (width >= height) {
+            heightRatio *= (height / width);
+        } else {
+            widthRatio *= (width / height);
+        }
+
+        return { width, height, widthRatio, heightRatio };
     }
        
     window_resize() {

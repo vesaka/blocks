@@ -5,9 +5,7 @@ class MainBlock extends HorizontalBlock {
         super(options);
     }
 
-    filter_position(position) {
-        console.log(position);
-        
+    filter_position(position) {        
         return super.filter_position(position);
     }
 

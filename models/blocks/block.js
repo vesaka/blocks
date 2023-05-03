@@ -97,8 +97,10 @@ class Block extends Model {
 
     grab(cross) {
         this.at = this.model.worldToLocal(cross.point);
-        this.at[this.axis] = (Cell.def.size * this.count + this.at[this.axis]) * 0.5;
-        //this.at.y *= 2;
+        // this.at[this.axis] = ((Cell.def.size * this.count) - (this.at[this.axis]+Cell.halfSize)) * 0.5;
+        // //this.at[this.axis] = (this.at[this.axis]+Cell.halfSize) / (Cell.def.size * this.count);
+        //this.at[this.axis] += (Cell.def.size * this.count) * 0.25;
+        this.at[this.axis] += Cell.halfSize/2;
 
         this.setState(ACTIVE);
         this.$listen({ pointer: ['drag'] });

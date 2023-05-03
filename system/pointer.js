@@ -205,19 +205,17 @@ class Pointer extends Container {
         if ('x' === this.direction) {
             plane.normal.set(1, 0, 0);
             this.constant = -(view.width) * 0.16;
-            //axis.copy(this.getRowAxis(block.row, at));
-            axis.copy(this.rows[block.row])
+            axis.copy(this.getRowAxis(block.row, at));
+            //axis.copy(this.rows[block.row])
         } else if ('y' === this.direction) {
             plane.normal.set(0, 0.64, 1);
             this.constant = -(view.height) * 0.25;
-            //axis.copy(this.getColAxis(block.col, at));
-            axis.copy(this.cols[block.col]);
+            axis.copy(this.getColAxis(block.col, at));
+            //axis.copy(this.cols[block.col]);
 
 
         }
-        //plane.normal.copy(block.normal)
-        // box.model.localToWorld(axis.start);
-        // box.model.localToWorld(axis.end);
+
         this.arrowHelper = new ArrowHelper(block.normal, axis.end, table.width*4);
         this.scene.add(this.arrowHelper)
         this.updatePlane();

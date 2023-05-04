@@ -1,23 +1,25 @@
 <template>
-   <div id="gameScreen" class="d-flex position-relative w-100">
-        <canvas ref="canvas" class="d-flex position-fixed inset-0 -z-20" style="left: 0; right: 0;"></canvas>
+   <div id="gameScreen" class="flex relative inset w-full">
+        <canvas ref="canvas" class="flex fixed inset-0 -z-20" style="left: 0; right: 0;"></canvas>
+        <div class="flex flex-row w-full">
+            <Level/>
+        </div>
     </div>
 </template>
 <script setup>
-    import { computed, ref, watch, onMounted, onBeforeUnmount } from 'vue';
+    import { ref, onMounted, onBeforeUnmount } from 'vue';
     import BlocksGame from '$blocks/blocks-game';
     import ResizeMixin from '$core/3d/mixins/resize-mixin.js';
     import StatesMixin from '$core/mixins/states-mixin.js';
+
+    import Level from '$blocks/components/ui/hud/Level.vue'
     
     import options from '$blocks/config/options.json';
     import settings from '$blocks/config/settings.json';
     import assets from '$blocks/config/assets.json';
     import { useGameStore, useAuthStore } from '$blocks/bootstrap/stores.js';
     
-    import {raw} from '$core/utils/object.js';
-    
     const store = useGameStore();
-    const key = ref(0);
     const canvas = ref(null);
     let game = null;
     onMounted(() => {
@@ -29,6 +31,8 @@
             mixins: [ResizeMixin, StatesMixin]
         });
         game.load();
+
+        setTimeout(() => game.startLevel(), 300);
     });
 
     onBeforeUnmount(() => {

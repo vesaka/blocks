@@ -11,8 +11,6 @@ import Blocks from './blocks/blocks.js';
 import Goal from './goal';
 import Cell from './cells/cell';
 
-import  GUI from 'lil-gui';
-
 class Box extends Model {
     
     path = null;
@@ -21,7 +19,7 @@ class Box extends Model {
         super(options);
         
         this.$listen({
-            level: ['start', 'end'],
+            level: ['loaded', 'start', 'end', 'close'],
             pointer: ['start', 'drag', 'stop', 'out'],
            // lucky: ['loaded'],
         });
@@ -37,15 +35,7 @@ class Box extends Model {
         this.createGoal();
         this.createBlocks();
         this.model.rotation.z = -Math.PI*0.26;
-
-        const gui = new GUI();
-        // gui.add(this.model.rotation, 'x', -Math.PI, Math.PI, 0.001).name('roationX');
-        // gui.add(this.model.rotation, 'y', -Math.PI, Math.PI, 0.001).name('roationY');
-        // gui.add(this.model.rotation, 'z', -Math.PI, Math.PI, 0.001).name('roationZ');
         
-        // gui.add(this.model.position, 'x', -300, 300, 1).name('boxX');
-        // gui.add(this.model.position, 'y', -100, 400, 10).name('boxY');
-        // gui.add(this.model.position, 'z', -100, 300, 10).name('boxZ');
     }
     
     createModel() {
@@ -55,16 +45,12 @@ class Box extends Model {
     createBoard() {
         const { options } = this;
         const board = new Board(options.models.board);
+        
         this.setPosition(
-                -120,
-                -70,
-                80
+                options.game.position.x,
+                options.game.position.y,
+                options.game.position.z
         );
-        // this.setPosition(
-        //         -table.width / 2 + Cell.def.size*2,
-        //         -table.height * 0.1,
-        //         25
-        // );
 
         this.add(board);
         
@@ -104,6 +90,12 @@ class Box extends Model {
     
     add(obj) {
         this.model.add(obj.model);
+    }
+
+    level_loaded(puzzle) {
+        this.board.show(() => {
+            this.$blocks.arrangeItems(puzzle)
+        });
     }
     
     level_start() {

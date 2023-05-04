@@ -1,19 +1,18 @@
 import Collection from '$core/models/collection';
-import { Object3D, Raycaster, Vector2 } from 'three';
+import { Raycaster, Vector2 } from 'three';
 
 
 import StatesMixin from '$core/mixins/states-mixin';
 import HistoryMixin from '$core/mixins/history-mixin';
-import { extend, raw } from '$core/utils/object';
+import { extend, raw, unserialize } from '$core/utils/object';
 import { rand } from '$core/utils/math';
 
 import MainBlock from './main-block';
 import HorizontalBlock from './horizontal-block';
 import VerticalBlock from './vertical-block';
-import Grid from '$blocks/system/grid';
 
 import { boards } from '$blocks/config/puzzles.json';
-import { unserialize } from '$core/utils/object';
+import gsap from 'gsap';
 
 const MAP = {
     main: MainBlock,
@@ -29,13 +28,14 @@ class Blocks extends Collection {
         this.$listen({
             game: ['destroy'],
             level: ['start', 'end'],
+            board: ['ready'],
             pointer: ['start', 'drag', 'stop', 'out']
         });
 
         this.ray = new Vector2;
         this.raycaster = new Raycaster;
         this.activeBlock = null;
-        this.placeItems();
+        //this.placeItems();
 
 
     }
@@ -70,18 +70,37 @@ class Blocks extends Collection {
 
     }
 
-    clearItems() {
-        const {table} = this;
-
-    }
     placeItems() {
-        const grid = new Grid({path: this.path});
-        const board = boards.find(({ solution }) => solution.length >= 15);
+        const board = boards.find(({ solution }) => solution.length == 1);
 
         board.blocks.forEach(b => this.createItem(unserialize(b)));
-        //const { blocks } = this.settings.puzzles.list[2];
-        //blocks.forEach(p => this.createItem(p));
 
+    }
+
+    arrangeItems(board) {
+        const { box, screen } = this;
+
+        board.blocks.forEach(item => { 
+            const block = this.createItem(item);
+            block.model.position.z += block.id * block.size.depth*5;
+            box.model.add(block.model);
+         });
+
+         const tl = gsap.timeline({
+            repeat: 0,
+            duration: 1,
+            onComplete: () => {
+                this.$emit('level_start')
+            }
+         })
+
+         this.each(item => {
+            tl.to(item.model.position, {
+                z: item.position.z,
+                
+            }, '>-0.45')
+            
+         });
     }
 
     createItem(options) {
@@ -92,6 +111,7 @@ class Blocks extends Collection {
                 : (options.orientation === 'horizontal' ? typeKeys[1] : typeKeys[2])
 
         const blockClass = MAP[name];
+        
         if (!blockClass) {
             return;
         }
@@ -105,7 +125,15 @@ class Blocks extends Collection {
 
         const block = new blockClass(opts);
         this.add(block);
+        return block;
+    }
 
+    clearItems() {
+        this.each(item => {
+            this.model.remove(item.model);
+        });
+
+        this.clearItems();
     }
 
     pointer_start(point) {

@@ -2,7 +2,7 @@ import Model from '$core/3d/models/three-model';
 import { Object3D, Mesh, BoxGeometry, MeshPhongMaterial, Box3 } from 'three';
 import Cell from './cells/board-cell';
 import { extend } from '$core/utils/object';
-
+import gsap from 'gsap';
 class Board extends Model {
 
     slots = [];
@@ -11,7 +11,7 @@ class Board extends Model {
         super(options);
         this.box = new Box3().setFromObject(this.model);
         this.$listen({
-            level: ['starting', 'start', 'end']
+            level: ['loaded', 'start', 'end']
         });
         this.createLabels();
         
@@ -19,7 +19,7 @@ class Board extends Model {
 
     createModel() {
         const model = new Object3D;
-        const {table, cell} = this;
+        const {table, cell, scale } = this;
         this.slots = [];
         table.eachSlot((slot) => {
             slot.cell = new Cell(extend(cell, {
@@ -35,6 +35,7 @@ class Board extends Model {
             model.add(slot.cell.model);
             this.slots.push(slot);
         });
+        model.scale.set(scale.from, scale.from, scale.from);
         return model;
     }
 
@@ -49,6 +50,42 @@ class Board extends Model {
 
     shuffleLabels() {
         
+    }
+
+    show(onComplete) {
+        const { model, table, goal } = this;
+        model.position.x = table.width * 0.5;
+        model.position.y = table.height * 0.5;
+
+        goal.model.position.x += goal.size.width*4; 
+        const tl = gsap.timeline({
+            repeat: 0,
+            ease: 'elastic',
+            onComplete
+        });
+        tl.add('showBoard')
+            .add('addBlocks')
+            .to(model.scale, {
+                x: 1, 
+                y: 1,
+                z: 1,
+            }, 'showBoard')
+            .to(model.position, {
+                x: 0,
+                y: 0
+            }, 'showBoard')
+            .to(goal.model.position, {
+                x: goal.position.x
+            }, '>addBlocks');
+
+        
+        
+        
+
+    }
+
+    hide() {
+
     }
 }
 

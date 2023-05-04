@@ -3,6 +3,13 @@ import api from '$core/services/wp-api.js';
 import { raw, extend } from '$core/utils/object.js';
 import { game } from '$blocks/config/options.json';
 
+export const LOADING = 'loading';
+export const READY = 'ready';
+export const PLAYING = 'playing';
+export const FINISHED = 'finished';
+
+export const gameStates = [LOADING, READY, PLAYING, FINISHED];
+
 export const useAuthStore = defineStore('$auth$', {
     state: () => ({
         user: {
@@ -37,17 +44,26 @@ export const useAuthStore = defineStore('$auth$', {
     }
 });
 
+const initialLevel = {
+    current: 1,
+    start: '',
+    end: '',
+    score: '',
+    secret: '',
+    events: []
+};
+
 export const useGameStore = defineStore('game', {
     state: () => {
         return {
             score: 0,
             bestScore: 0,
-            endScore: 0,
-            state: 'ready',
+            state: LOADING,
             players: [],
             fullscreen: false,
             sound: true,
-            level: raw(game.level),
+            level: initialLevel,
+            levels: [],
             log: {
                 start: '',
                 end: '',
@@ -76,8 +92,22 @@ export const useGameStore = defineStore('game', {
         resetAll() {            
             const score = this.score;
         },
+        resetLevel() {
+            const { current, moves } = this.state.level;
+            this.state.level = extend(this.state.level, {
+                current, moves
+            });
+        },
+        startLevel(level, moves) {
+            this.state.level = extend(this.state.level, {
+                current: level, moves
+            });
+        },
         setState(state) {
             this.state = state;
+        },
+        addEntry(entry) {
+            this.state.log.entries.push(entry);
         }
     },
     getters: {

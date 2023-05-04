@@ -97,8 +97,6 @@ class Block extends Model {
 
     grab(cross) {
         this.at = this.model.worldToLocal(cross.point);
-        // this.at[this.axis] = ((Cell.def.size * this.count) - (this.at[this.axis]+Cell.halfSize)) * 0.5;
-        // //this.at[this.axis] = (this.at[this.axis]+Cell.halfSize) / (Cell.def.size * this.count);
         //this.at[this.axis] += (Cell.def.size * this.count) * 0.25;
         this.at[this.axis] += Cell.halfSize/2;
 
@@ -106,6 +104,7 @@ class Block extends Model {
         this.$listen({ pointer: ['drag'] });
         this.range = this.getRange();
 
+        this.$listen({block: ['released']});
         this.$emit('block_grabed', this);
 
     }
@@ -114,9 +113,8 @@ class Block extends Model {
         this.at = null;
         this.setState(IDLE);
 
-        const { model, direction, table, axis } = this;
+        const { model, axis } = this;
 
-        const attribute = this.getDirection();
         model.position[axis] = round(model.position[axis], Cell.def.size);
         this.range = {};
         this.releaseSlots().bookSlots();
@@ -125,20 +123,9 @@ class Block extends Model {
 
     }
 
-    getNormal(origin) {
-        const [first, second] = this.model.children;
-        const line = new Vector3().subVectors(second.worldToLocal(origin.clone()), first.worldToLocal(origin.clone())).normalize();
-
-        //console.log(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3));;
-        return line.normalize();
-    }
-
     get normal() {
         const [first, second] = this.model.children;
-        const line = new Vector3().subVectors(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3)).normalize();
-        //line.y = -0.62;
-        //console.log(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3));;
-        return line;
+        return new Vector3().subVectors(first.getWorldPosition(new Vector3), second.getWorldPosition(new Vector3)).normalize();
     }
 
 
@@ -245,11 +232,10 @@ class Block extends Model {
             this.model.add(mesh)
         });
 
+    }
 
-        //
-        //mesh.rotation.x = Math.PI/2;
-        //model.add(mesh);
-
+    block_released() {
+     
     }
 
 }

@@ -132,7 +132,7 @@ class Goal extends Model {
         const { table, size, goal, at, model: {position} } = this;
         
         const goalSize = goal.size[prop];
-        console.log(goalSize);
+
         let min = 0, max = table[prop] - size[prop];
         goal.resolve({
             top() {

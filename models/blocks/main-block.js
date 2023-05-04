@@ -10,39 +10,24 @@ class MainBlock extends HorizontalBlock {
     }
 
     getRange() {
-        const {table, direction, axis, size, goal, at, model: {position}} = this;
-
-        const goalSize = Math.max(goal.size.width, goal.size.height);
-        let min = 0, max = table[direction] - size[direction];
-        
-        
-        goal.resolve({
-            top() {
-                min -= goalSize;
-            },
-            left() {
-                min = -goalSize;
-                max = table.width;
-            },
-            bottom() {
-                min = 0;
-                max += goalSize;
-            },
-            right() {
-                min = 0;
-                max = table.width + goalSize;
-            }
-        });
-        
+        const {table, size} = this;        
         const range = super.getRange();
-        min = Math.max(min, range.min);
-        max = Math.min(max, range.max);
+        
+        if (table.width - size.width <= range.max) {
+            range.max = table.width
+        }
 
-        return {min, max};
+        
+        return range;
     }
     
     block_released() {
-        
+        const { goal, model } = this;
+
+        if ((goal.position.x === model.position.x) && (goal.position.y === model.position.y)) {
+            this.$emit('game_over', 'won');
+        }
+        console.log(goal.position, this.model.position);
     }
 
 }

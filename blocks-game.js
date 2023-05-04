@@ -1,14 +1,12 @@
 import Game3D from '$lib/game/core/3d/game-main.js';
-import StatesMixin from '$core/mixins/states-mixin.js';
 import {
-    PerspectiveCamera,
-    DirectionalLight, Vector3, Clock, Color,
-    HemisphereLight, HemisphereLightHelper
+    PerspectiveCamera, Clock, HemisphereLight
 } from 'three';
 
 import Box from '$blocks/models/box';
 import Cell from '$blocks/models/cells/cell';
 import Pointer from '$blocks/system/pointer';
+import Level from '$blocks/system/level';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import { extend } from '$core/utils/object';
 import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
@@ -37,11 +35,18 @@ class BlocksGame extends Game3D {
             mixins: [HistoryMixin]
         });
 
+        this.$set('$level', new Level({
+            mixins: [HistoryMixin]
+        }));
+
+    }
+
+    startLevel(level = 1) {
+        this.$level.load(level);
     }
 
     renderer_created(renderer) {
         const camera = this.options.camera;
-        const {settings} = this;
         this.$set('camera', new PerspectiveCamera(camera.fov, this.width / this.height, camera.near, camera.far));
         this.$emit('camera_created');
         this.camera.position.set(
@@ -63,7 +68,6 @@ class BlocksGame extends Game3D {
     
     createLights() {
         const hemisphereLight = new HemisphereLight( 0x444444, 0x999999, 1);
-        const hemisphereLightHelper = new HemisphereLightHelper(hemisphereLight, 5);
         this.scene.add(hemisphereLight);
     }
     
@@ -73,8 +77,7 @@ class BlocksGame extends Game3D {
     
     async build() {
         const {
-            scene, camera, renderer,
-            options, clock
+            scene, camera, renderer
         } = this;
         
         const animate = () => {

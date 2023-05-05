@@ -1,5 +1,5 @@
 <template>
-    <div class="d-flex flex-column rounded-lg bg-gray-100  mt-20 p-12  w-10/12 md:w-1/2 mx-auto">
+    <div class="flex flex-col rounded-lg bg-gray-100  mt-20 p-12  w-10/12 md:w-1/2 mx-auto">
         <slot name="header">
             <div :class="merge('header', props.header)" v-html="props.formTitle"></div>
         </slot>

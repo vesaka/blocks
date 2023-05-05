@@ -1,3 +1,13 @@
 {
-    "title": "The Action Blocks"
+    "title": "The Action Blocks",
+    "home": {
+        "btn": {
+            "play-as-guest": "Play as guest",
+            "login": "Login",
+            "free-play": "Free Play",
+            "play": "Play"
+        },
+        "no-account": "No Account?",
+        "register": "Sign Up"
+    }
 }

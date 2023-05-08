@@ -8,9 +8,208 @@
     font-weight: 400;
     src: url(assets/fonts/LuckiestGuy.ttf);
   }
+
   @font-face {
     font-family: BowlbyOne;
     font-weight: 500;
     src: url(assets/fonts/BowlbyOne.ttf);
+  }
+}
+
+@layer components {
+  :root {
+    --var-border-radius: 1rem;
+    --var-overlay-radius: 40%;
+  }
+
+  .pushable {
+    position: relative;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    outline-offset: 4px;
+    transition: filter 250ms;
+    margin-bottom: 0.5rem;
+  }
+
+  .shadow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--var-border-radius);
+    background: rgba(0, 0, 0, 0.25);
+    will-change: transform;
+    transform: translateY(2px);
+    transition:
+      transform 600ms cubic-bezier(.3, .7, .4, 1);
+  }
+
+  .edge {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--var-border-radius);
+  }
+
+  .front {
+    display: block;
+    position: relative;
+    padding: 12px 42px;
+    border-radius: var(--var-border-radius);
+    font-size: 1.25rem;
+    will-change: transform;
+    transform: translateY(-4px);
+    transition:
+      transform 600ms cubic-bezier(.3, .7, .4, 1);
+    text-shadow: 0px 2px 0px rgba(255, 255, 255, 0.3);
+    font-weight: bold;
+    font-family: LuckiestGuy;
+    letter-spacing: 0.1rem;
+  }
+
+  .pushable:hover {
+    filter: brightness(110%);
+  }
+
+  .pushable:hover .front {
+    transform: translateY(-6px);
+    transition:
+      transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+  }
+
+  .pushable:active .front {
+    transform: translateY(-2px);
+    transition: transform 34ms;
+  }
+
+  .pushable:hover .shadow {
+    transform: translateY(4px);
+    transition:
+      transform 250ms cubic-bezier(.3, .7, .4, 1.5);
+  }
+
+  .pushable:active .shadow {
+    transform: translateY(1px);
+    transition: transform 34ms;
+  }
+
+  .pushable:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .btn-overlay {
+    position: absolute;
+    left: 0;
+    opacity: 1;
+    height: 85%;
+    width: 100%;
+  }
+
+  .top {
+    border-top-left-radius: var(--var-border-radius);
+    border-top-right-radius: var(--var-border-radius);
+    border-bottom-left-radius: var(--var-overlay-radius);
+    border-bottom-right-radius: var(--var-overlay-radius);
+    top: 0;
+  }
+
+  .bottom {
+    background-color: transparent;
+    border-top-left-radius: var(--var-overlay-radius);
+    border-top-right-radius: var(--var-overlay-radius);
+    border-bottom-left-radius: var(--var-border-radius);
+    border-bottom-right-radius: var(--var-border-radius);
+    bottom: 0;
+
+  }
+
+  .pushable.red .edge {
+    
+    background: linear-gradient(to left,
+        #52001b 0%,
+        #a30036 8%,
+        #a30036 92%,
+        #52001b 100%);
+  }
+
+  .pushable.red .front {
+    color: rgba(127, 29, 29, 1);
+    background: rgba(240, 0, 60, 1);
+  }
+
+  .pushable.red .bottom {
+    
+    background: linear-gradient(to top,
+        #b91c1c 0%,
+        #dc2626 20%,
+        #f87171 100%);
+  }
+
+  .pushable.blue .edge {
+    background: linear-gradient(to left,
+        #080052 0%,
+        #002ba3 8%,
+        #002ba3 92%,
+        #080052 100%);
+  }
+
+  .pushable.blue .front {
+    color: rgba(29, 29, 127, 1);
+    background: rgba(60, 0, 240, 1);
+  }
+
+  .pushable.blue .bottom {
+    background: linear-gradient(to top,
+        #331cb9 0%,
+        #3826dc 20%,
+        #7371f8 100%
+    );
+  }
+
+  .pushable.green .edge {
+    background: linear-gradient(to left,
+        #00520b 0%,
+        #00a300 8%,
+        #00a300 92%,
+        #00520b 100%);
+  }
+
+  .pushable.green .front {
+    color: rgba(29, 127, 29, 1);
+    background: rgba(60, 240, 0, 1);
+  }
+
+  .pushable.green .bottom {
+    
+    background: linear-gradient(to top,
+        #41b91c 0%,
+        #60dc26 20%,
+        #a3f871 100%);
+  }
+
+  .pushable.yellow .edge {
+    
+    background: linear-gradient(to left,
+        #312000 0%,
+        #705703 8%,
+        #705703 92%,
+        #312000 100%);
+  }
+
+  .pushable.yellow .front {
+    color: rgb(37, 24, 6);
+    background: rgba(240, 224, 0, 1);
+  }
+
+  .pushable.yellow .bottom {
+    background: linear-gradient(to top,
+        #855804 0%,
+        #dfad0c 20%,
+        #e4c30c 100%);
   }
 }

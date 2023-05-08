@@ -1,29 +1,30 @@
 <template>
     <div class="mb-4">
-        <label :class="merge('label', props.label)" v-if="title">
+        <label :class="tw('label', props.label)" v-if="title">
             <slot name="title">
                 <strong v-html="title"></strong>
             </slot>
         </label>
         <slot name="input">
-            <input :class="merge(input, props.input)"
+            <input :class="input"
                    :type="type" :placeholder="placeholder" :value="props.modelValue"
                    @input="onInput"/>
         </slot>
         <slot name="error">
-            <div :class="merge('invalid', props.invalid)" v-html="errors.first(name)"></div>
+            <div :class="invalid" v-html="errors.first(name)"></div>
         </slot>
     </div>
 </template>
 <script setup>
     import { onMounted } from 'vue';
-    import { classProps, merge } from '$blocks/utils/class.util';
+    import { tw } from '$blocks/utils/tw';
     import { input } from '$blocks/utils/tw/input.tw';
+    import { invalid } from '$blocks/utils/tw/form.tw';
     import { useErrorStore } from '$blocks/bootstrap/stores';
     const errors = useErrorStore();
     
     const $emit = defineEmits(['update:modelValue']);
-    const props = defineProps(Object.assign(classProps, {
+    const props = defineProps({
         type: {
             type: String,
             default: 'text',
@@ -51,7 +52,7 @@
             type: String,
             default: ''
         }
-    }));
+    });
     
     const onInput = ev => {
         errors.clear(props.name);

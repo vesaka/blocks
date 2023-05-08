@@ -1,5 +1,5 @@
-//import Login from '$blocks/components/pages/auth/Login.vue';
-//import SignUp from '$blocks/components/pages/auth/SignUp.vue';
+import Login from '$blocks/components/pages/auth/Login.vue';
+import SignUp from '$blocks/components/pages/auth/SignUp.vue';
 const Playground = () => import('$blocks/components/pages/Playground.vue');
 import Leaderboard from '$blocks/components/pages/Leaderboard.vue';
 import Start from '$blocks/components/pages/Start.vue';
@@ -20,25 +20,25 @@ const routes = [
             transitionName: 'slide-left',
         }
     },
-//    {
-//        path: LOGIN_PATH,
-//        name: 'login',
-//        component: Login,
-//        meta: {
-//            title: 'Log in',
-//            shouldBeLoggedIn: false,
-//            transitionName: 'jump',
-//        }
-//    },
-//    {
-//        path: SIGNUP_PATH,
-//        name: 'sign-up',
-//        component: SignUp,
-//        meta: {
-//            title: 'Sign up',
-//            transitionName: 'jump',
-//        }
-//    }, 
+   {
+       path: LOGIN_PATH,
+       name: 'login',
+       component: Login,
+       meta: {
+           title: 'Log in',
+           shouldBeLoggedIn: false,
+           transitionName: 'jump',
+       }
+   },
+   {
+       path: SIGNUP_PATH,
+       name: 'sign-up',
+       component: SignUp,
+       meta: {
+           title: 'Sign up',
+           transitionName: 'jump',
+       }
+   }, 
     {
         path: PLAY_PATH,
         name: 'playground',

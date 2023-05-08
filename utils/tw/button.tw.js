@@ -20,3 +20,9 @@ export const btnPrimary = {
     'text-center text-base font-normal': true,
     'text-white hover:bg-opacity-90 lg:px-8 xl:px-10': true
 };
+
+export const link = {
+    'mb-2 inline-block': true,
+    'text-base text-coconut': true,
+    'hover:text-blue-500 hover:underline': true
+};

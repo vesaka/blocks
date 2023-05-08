@@ -1,111 +1,113 @@
 <template>
-    <div class="flex flex-col rounded-lg bg-gray-100  mt-20 p-12  w-10/12 md:w-1/2 mx-auto">
-        <slot name="header">
-            <div :class="merge('header', props.header)" v-html="props.formTitle"></div>
-        </slot>
-        <div class="col-md-12">
+    <Card title="Login" class="mt-20 p-12 md:h-2/3  w-10/12 md:w-1/2 mx-auto z-10 text-coconut">
             <Transition name="fade">
-            <form :class="formClass" @submit.prevent="onSubmit" novalidate v-if="!didSubmit">
-                <slot></slot>
-                <div class="text text-danger py-2" v-html="displayError"></div>
-                <button type="submit" :class="merge('sbm', props.btnSubmit)" :disabled="isLoading">
-                    <slot name="submit">
-                        <strong v-html="props.submitText"></strong>
-                    </slot>
-                </button>
-                <div class="d-flex justify-content-center" v-if="isLoading">
-                    <div class="spinner-border text-warning" role="status" color>
-                        <span class="sr-only">Loading...</span>
+                <form :class="formClass" @submit.prevent="onSubmit" novalidate v-if="!didSubmit">
+                    <slot></slot>
+                    <div class="text text-danger py-2" v-html="displayError"></div>
+                    <button type="submit" :disabled="isLoading">
+                        <GameButton>
+                                <strong v-html="props.submitText"></strong>
+                        </GameButton>
+                    </button>
+                    <div class="d-flex justify-content-center" v-if="isLoading">
+                        <div class="spinner-border text-warning" role="status" color>
+                            <span class="sr-only">Loading...</span>
+                        </div>
                     </div>
-                </div>
-                <slot name="footer"></slot>
-            </form>
+                    <div class="font-lucky-guy text-sm">
+                        <slot name="footer"></slot>
+                    </div>
+                    
+                </form>
             </Transition>
             <Transition name="scale-in">
-            <div v-if="didSubmit">
-                <slot name="redirect">
-                    <div class="col-md-12 home-title">
-                        <img :src="asset(props.titleImage)">
-                        Thank you
-                    </div>
-                </slot>
-            </div>
+                <div v-if="didSubmit">
+                    <slot name="redirect">
+                        <div class="col-md-12 home-title">
+                            <img :src="asset(props.titleImage)">
+                            Thank you
+                        </div>
+                    </slot>
+                </div>
             </Transition>
-        </div>
-    </div>
+    </Card>
 </template>
 <script setup>
-    import { computed, ref, watch } from 'vue';
-    
-    import { asset } from '$blocks/bootstrap/paths.js';
-    
-    import { useRouter } from 'vue-router';
-    import { raw } from '$core/utils/object';   
-    
-    import { classProps, merge } from '$blocks/utils/class.util';
-    import { useErrorStore } from '$blocks/bootstrap/stores';
-    const errors = useErrorStore();
-    
-    const router = useRouter();
-    let loading = ref(false);
-    let submitted = ref(false);
-    let error = ref('');
+import { computed, ref, watch } from 'vue';
 
-    const props = defineProps(Object.assign(classProps, {
-        auth: {
-            type: Object,
-            default: {}
-        },
-        titleImage: {
-            type: String,
-            default: ''
-        },
-        formTitle: {
-            type: String,
-            default: ''
-        },
-        name: {
-            type: String,
-            default: ''
-        },
-        submit: {
-            type: Function,
-            default: () => {
+import { asset } from '$blocks/bootstrap/paths.js';
+
+import { useRouter } from 'vue-router';
+import { raw } from '$core/utils/object';
+
+import { tw } from '$blocks/utils/tw';
+import { header, sbm } from '$blocks/utils/tw/form.tw';
+import { input } from '$blocks/utils/tw/input.tw';
+import { useErrorStore } from '$blocks/bootstrap/stores';
+import Card from '$blocks/components/ui/Card.vue';
+import GameButton from './GameButton.vue';
+const errors = useErrorStore();
+
+const router = useRouter();
+let loading = ref(false);
+let submitted = ref(false);
+let error = ref('');
+
+const props = defineProps({
+    auth: {
+        type: Object,
+        default: {}
+    },
+    titleImage: {
+        type: String,
+        default: ''
+    },
+    formTitle: {
+        type: String,
+        default: ''
+    },
+    name: {
+        type: String,
+        default: ''
+    },
+    submit: {
+        type: Function,
+        default: () => {
+        }
+    },
+    submitText: {
+        type: String,
+        default: 'Submit'
+    },
+});
+
+watch(props.auth, (n) => {
+    error.value = '';
+});
+
+const onSubmit = () => {
+    loading.value = true;
+    props.submit().then(() => {
+        //submitted.value = true;
+    })
+        .catch(({ response }) => {
+
+            if ((422 === response.status)) {
+                console.log(response.data);
+                errors.update(raw(response.data));
             }
-        },
-        submitText: {
-            type: String,
-            default: 'Submit'
-        },
-    }));
-    
-    watch(props.auth, (n) => {
-        error.value = '';
-    });
+        })
+        .then(() => {
+            loading.value = false
+        })
+};
 
-    const onSubmit = () => {
-        loading.value = true;
-        props.submit().then(() => {
-                    //submitted.value = true;
-                })
-                .catch(({ response }) => {
-                    
-                    if ((422 === response.status)) {
-                        console.log(response.data);
-                        errors.update(raw(response.data));
-                    }
-                })
-                .then(() => {
-                    loading.value = false
-                })
-    };
+const displayError = computed(() => { return error.value; });
+const isLoading = computed(() => { return loading.value; });
+const didSubmit = computed(() => { return submitted.value; });
 
-    const displayError = computed(() => { return error.value; });
-    const isLoading = computed(() => { return loading.value; });
-    const didSubmit = computed(() => { return submitted.value; });
-    
-    const formClass = computed(() => ({
-        'register-form text-center': true,
-        [props.name]: true
-    }));
+const formClass = computed(() => ({
+    'register-form text-center': true,
+    [props.name]: true
+}));
 </script>

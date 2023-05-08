@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import api from '$core/services/wp-api.js';
-import { raw, extend } from '$core/utils/object.js';
+import { raw, extend, isObject } from '$core/utils/object.js';
 import { game } from '$blocks/config/options.json';
 
 export const LOADING = 'loading';
@@ -124,5 +124,45 @@ export const useGameStore = defineStore('game', {
     },
     persist: {
         enabled: false,
+    }
+});
+
+export const useErrorStore = defineStore('$errors$', {
+    state: () => ({
+        errors: {
+            
+        }
+    }),
+    actions: {
+        update(newErrors) {
+            this.errors = newErrors;
+        },
+        clear(name) {
+            if (typeof name === 'string') {
+                this.errors[name] = '';
+            } else {
+                this.errors = {};
+            }
+        }
+    },
+    getters: {
+        first(state) {
+            return name => { 
+                const err = state.errors[name] || '';
+                if (isObject(err)) {
+                    
+                    const firstError = raw(err[Object.keys(err)[0]]);
+                    
+                    return aprintf(t(`messages.${firstError.message}`, firstError.message), firstError);
+                } else if (Array.isArray(err)) {
+                    return err[0];
+                }
+                
+                return err;
+            };
+        },
+        collect(state) {
+            return name => state.errors[name] || [];
+        }
     }
 });

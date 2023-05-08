@@ -37,7 +37,7 @@
     import TickCheckbox from '$blocks/components/ui/inputs/TickCheckbox.vue';
     import api from '$core/services/express-spa-api.js';
     import { useRouter } from 'vue-router';
-    import { svg, PLAY, LOGIN } from '$blocks/bootstrap/paths.js'
+    import { svg, PLAY_PATH, LOGIN_PATH } from '$blocks/bootstrap/paths.js'
     import { t } from '$core/utils/i18n';
 
     import { useErrorStore } from '$blocks/bootstrap/stores';

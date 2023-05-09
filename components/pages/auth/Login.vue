@@ -54,12 +54,12 @@ const router = useRouter();
 
 const onSubmit = () => {
 
-    return api.post('login-test', raw(auth))
-        // .then(({ data }) => {
-        //     api.setBearer(data.token);
-        //     authStore.login(data);
-        //     router.push(PLAY_PATH);
-        // });
+    return api.post('api/login', raw(auth), { withCredentials: true })
+        .then(({ data }) => {
+            api.setBearer(data.token);
+            // authStore.login(data);
+            // router.push(PLAY_PATH);
+        });
 };
 </script>
 

@@ -15,8 +15,6 @@
 
     let ready = ref(false);
     const auth = useAuthStore();
-    // api.setBaseUrl(env.VITE_BASE_URL)
-    //     .handshake();
     api.connect({
         url: env.VITE_BASE_URL,
         csrfPath: 'sanctum/csrf-cookie'

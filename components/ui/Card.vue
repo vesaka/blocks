@@ -3,7 +3,7 @@
         <div :class="cardClass" style="transform: perspective(100px) rotateX(-2deg);">
             <div :class="innerCard"></div>
         </div>
-        <CardTitle class="w-5/6 absolute -top-32" fill="#ff9955" :title="props.title"/>
+        <CardTitle class="w-5/6 absolute -top-28 sm:-top-24 md:-top-32" fill="#ff9955" :title="props.title"/>
         <div class="flex flex-col absolute ">
             <slot></slot>
         </div>

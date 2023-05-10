@@ -6,7 +6,7 @@
             </slot>
         </label>
         <slot name="input">
-            <input :class="input"
+            <input :class="inputClass"
                    :type="type" :placeholder="placeholder" :value="props.modelValue"
                    @input="onInput"/>
         </slot>
@@ -51,8 +51,13 @@
         placeholder: {
             type: String,
             default: ''
+        }, 
+        inputClass: {
+            type: [String, Object]
         }
     });
+
+    const inputClass = tw(input, props.inputClass);
     
     const onInput = ev => {
         errors.clear(props.name);

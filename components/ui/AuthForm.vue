@@ -1,35 +1,34 @@
 <template>
-    <Card title="Login" class="mt-20 p-12 md:h-2/3  w-10/12 md:w-1/2 mx-auto z-10 text-coconut">
-            <Transition name="fade">
-                <form :class="formClass" @submit.prevent="onSubmit" novalidate v-if="!didSubmit">
-                    <slot></slot>
-                    <div class="text text-danger py-2" v-html="displayError"></div>
-                    <button type="submit" :disabled="isLoading">
-                        <GameButton>
-                                <strong v-html="props.submitText"></strong>
-                        </GameButton>
-                    </button>
-                    <div class="d-flex justify-content-center" v-if="isLoading">
-                        <div class="spinner-border text-warning" role="status" color>
-                            <span class="sr-only">Loading...</span>
-                        </div>
+    <Card title="Login" class="mt-20 p-12 md:h-2/3 w-10/12 md:w-1/2 mx-auto z-10 text-coconut">
+        <Transition name="fade">
+            <form :class="formClass" @submit.prevent="onSubmit" novalidate v-if="!didSubmit">
+                <slot></slot>
+                <div class="text text-danger py-2" v-html="displayError"></div>
+                <button type="submit" :disabled="isLoading">
+                    <GameButton>
+                        <strong v-html="props.submitText"></strong>
+                    </GameButton>
+                </button>
+                <div class="d-flex justify-content-center" v-if="isLoading">
+                    <div class="spinner-border text-warning" role="status" color>
+                        <span class="sr-only">Loading...</span>
                     </div>
-                    <div class="font-lucky-guy text-sm">
-                        <slot name="footer"></slot>
-                    </div>
-                    
-                </form>
-            </Transition>
-            <Transition name="scale-in">
-                <div v-if="didSubmit">
-                    <slot name="redirect">
-                        <div class="col-md-12 home-title">
-                            <img :src="asset(props.titleImage)">
-                            Thank you
-                        </div>
-                    </slot>
                 </div>
-            </Transition>
+                <div class="font-lucky-guy text-sm">
+                    <slot name="footer"></slot>
+                </div>
+
+            </form>
+        </Transition>
+        <Transition name="scale-in">
+            <div class="text-4xl w-3/4 mx-auto" v-if="didSubmit">
+                <slot name="redirect">
+                    <div class="text-center font-lucky-guy text-coconut">
+                        Thank you
+                    </div>
+                </slot>
+            </div>
+        </Transition>
     </Card>
 </template>
 <script setup>
@@ -39,7 +38,7 @@ import { asset } from '$blocks/bootstrap/paths.js';
 
 import { useRouter } from 'vue-router';
 import { raw } from '$core/utils/object';
-
+import { t } from '$core/utils/i18n';
 import { tw } from '$blocks/utils/tw';
 import { header, sbm } from '$blocks/utils/tw/form.tw';
 import { input } from '$blocks/utils/tw/input.tw';
@@ -88,13 +87,16 @@ watch(props.auth, (n) => {
 const onSubmit = () => {
     loading.value = true;
     props.submit().then(() => {
-        //submitted.value = true;
-    })
-        .catch(({ response }) => {
-
+        submitted.value = true;
+    }).catch(({ response }) => {
             if ((422 === response.status)) {
-                console.log(response.data);
-                errors.update(raw(response.data));
+                const newErrors = {};
+                for (let name in response.data.errors) {
+                    const error = response.data.errors[name];
+                    newErrors[name] = t(`messages.${name}.${error[0].rule}`)
+                }
+                console.log(newErrors);
+                errors.update(newErrors);
             }
         })
         .then(() => {

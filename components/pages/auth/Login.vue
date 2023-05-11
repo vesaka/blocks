@@ -1,5 +1,4 @@
 <template>
-    <NightSky>
         <AuthForm name="login-form" :submit="onSubmit" form-title="Login">
             <div class="form-group">
                 <Group :placeholder="t('login.name.placeholder')" name="email" type="text" v-model="auth.email"></Group>
@@ -19,11 +18,9 @@
                 </p>
             </template>
         </AuthForm>
-    </NightSky>
 </template>
 <script setup>
 import { reactive, watch } from 'vue';
-import NightSky from '$blocks/components/ui/NightSky.vue';
 import AuthForm from '$blocks/components/ui/AuthForm.vue';
 import Group from '$blocks/components/ui/inputs/Group.vue';
 import TickCheckbox from '$blocks/components/ui/inputs/TickCheckbox.vue';

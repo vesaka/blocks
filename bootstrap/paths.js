@@ -6,7 +6,7 @@ export const PLAY_PATH = '/playground';
 export const LEADERBOARD = '/leaderboard';
 export const PAGE_404 = '/404';
 export const FORGOT_PASSWORD = '/forgot-password';
-export const RESET_PASSWORD = '/reset-password';
+export const RESET_PASSWORD = '/ reset-password';
 
 let START = app.url === window.location.host ? window.location.origin + app.theme : '';
 export const svg = path => {

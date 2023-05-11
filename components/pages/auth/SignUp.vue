@@ -1,6 +1,5 @@
 <template>
-    <NightSky>
-        <AuthForm title="Sign UP" class="md:w-2/3" :submit="onSubmit">
+        <AuthForm title="Sign UP" class="" :submit="onSubmit">
             <div class="mt-24 md:-mt-12">
             <div class="flex flex-col md:flex-row">
                 <Group name="name" class="px-2 mb-1" :input-class="inputClass" :placeholder="t('sign-up.username.placeholder', 'Enter your username')"
@@ -37,11 +36,9 @@
                     v-html="t('sign-up.check-email', 'Please check you email to confirm your registration')"></p>
             </template>
         </AuthForm>
-    </NightSky>
 </template>
 <script setup>
 import { reactive, ref, computed, watch } from 'vue';
-import NightSky from '$blocks/components/ui/NightSky.vue';
 import AuthForm from '$blocks/components/ui/AuthForm.vue';
 import Group from '$blocks/components/ui/inputs/Group.vue';
 import TickCheckbox from '$blocks/components/ui/inputs/TickCheckbox.vue';

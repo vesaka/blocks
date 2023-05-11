@@ -1,15 +1,13 @@
 import { defineStore } from 'pinia';
-import api from '$core/services/wp-api.js';
 import { raw, extend, isObject } from '$core/utils/object.js';
-import { game } from '$blocks/config/options.json';
-
+import { FREE_PLAY, COMPETITION } from './constants.js'
 export const LOADING = 'loading';
 export const READY = 'ready';
 export const PLAYING = 'playing';
 export const FINISHED = 'finished';
 
 export const gameStates = [LOADING, READY, PLAYING, FINISHED];
-
+export const modes = ['free', 'competition'];
 export const useAuthStore = defineStore('$auth$', {
     state: () => ({
         user: {
@@ -59,6 +57,7 @@ export const useGameStore = defineStore('game', {
             score: 0,
             bestScore: 0,
             state: LOADING,
+            mode: 'free',
             players: [],
             fullscreen: false,
             sound: true,
@@ -88,6 +87,11 @@ export const useGameStore = defineStore('game', {
         },
         updateBestScore() {
             
+        },
+        updateMode(mode) {
+            if ([FREE_PLAY, COMPETITION].includes(mode)) {
+                this.state.mode = mode;
+            }
         },
         resetAll() {            
             const score = this.score;
@@ -150,9 +154,7 @@ export const useErrorStore = defineStore('$errors$', {
             return name => { 
                 const err = state.errors[name] || '';
                 if (isObject(err)) {
-                    
                     const firstError = raw(err[Object.keys(err)[0]]);
-                    
                     return aprintf(t(`messages.${firstError.message}`, firstError.message), firstError);
                 } else if (Array.isArray(err)) {
                     return err[0];

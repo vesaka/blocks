@@ -1,5 +1,4 @@
 <template>
-    <NightSky>
         <AuthForm name="login-form" title-image="Reset Password" :submit="onSubmit" :auth="auth">
             <div class="form-group">
                 <Group type="password" :placeholder="t('reset-password.password.placeholder')" v-model="auth.password"
@@ -21,12 +20,10 @@
                 </p>
             </template>
         </AuthForm>
-    </NightSky>
 </template>
 <script setup>
 
 import { reactive } from 'vue';
-import NightSky from '$blocks/components/ui/NightSky.vue';
 import AuthForm from '$blocks/components/ui/AuthForm.vue';
 import Group from '$blocks/components/ui/inputs/Group.vue';
 import { LOGIN_PATH } from '$blocks/bootstrap/paths.js';

@@ -15,7 +15,7 @@ const groups = [
 ];
 
 const tweens = {
-     ease: {
+    ease: {
         enterActive: 'duration-300 ease-out',
         enterFrom: 'transform opacity-0',
         enterTo: 'opacity-100',
@@ -57,11 +57,9 @@ const tweens = {
 
 export const tween = (name, extra = {}) => {
     const transition = raw(tweens[name] || Object.values(tweens)[0]);
-    
+
     const group = {};
     for (const key of groups) {
-        
-        //console.log(transition[key])
         group[key] = (transition[key] || '') + (extra[key] || '');
     }
     console.log(name, group);

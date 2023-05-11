@@ -3,6 +3,7 @@
         <canvas ref="canvas" class="flex fixed inset-0 -z-20" style="left: 0; right: 0;"></canvas>
         <div class="flex flex-row w-full">
             <Level/>
+            <Moves/>
         </div>
     </div>
 </template>
@@ -12,7 +13,8 @@
     import ResizeMixin from '$core/3d/mixins/resize-mixin.js';
     import StatesMixin from '$core/mixins/states-mixin.js';
 
-    import Level from '$blocks/components/ui/hud/Level.vue'
+    import Level from '$blocks/components/ui/hud/Level.vue';
+    import Moves from '$blocks/components/ui/hud/Moves.vue';
     
     import options from '$blocks/config/options.json';
     import settings from '$blocks/config/settings.json';

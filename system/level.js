@@ -9,8 +9,10 @@ class Level extends Container {
         this.$listen({
             level: ['start', 'end'],
             pointer: ['start', 'move', 'release'],
-            blocl: ['grab', 'release']
-        })
+            block: ['grabbed', 'released']
+        });
+
+        this.startAt = null;
     }
 
     load(levelNumber = 1) {
@@ -27,6 +29,19 @@ class Level extends Container {
     }
 
     reset() {
+
+    }
+
+    block_grabbed(block) {
+        this.startAt = block.model.position.clone();
+        // console.log('grab', block.model.position);
+    }
+
+    block_released(block) {
+        if (!block.model.position.equals(this.startAt)) {
+            console.log(this.$store.level)
+            this.$store.level.moves++;
+        }
 
     }
 }

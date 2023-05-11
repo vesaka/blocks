@@ -15,7 +15,7 @@ class Pointer extends Container {
         this.$listen({
             game: ['destroy'],
             level: ['start', 'end'],
-            block: ['grabed'],
+            block: ['grabbed'],
             window: ['resize']
         });
         
@@ -90,7 +90,6 @@ class Pointer extends Container {
     
     
     level_start() {
-        console.log(this);
         this.toggleEvents();
     }
     
@@ -151,7 +150,7 @@ class Pointer extends Container {
             .updatePlane()
             .$emit('pointer_stop', this.pointer);
         
-        this.$off('block_released');
+        //this.$off('block_released');
         this.addEntry({
             event: 'release',
             at: this.target
@@ -177,7 +176,7 @@ class Pointer extends Container {
         return this;
     }
     
-    block_grabed(block) {
+    block_grabbed(block) {
         const { plane, view, table, axis, pointer } = this;
         const { at } = block;
         this.direction = block.getDirection();

@@ -48,6 +48,7 @@ const initialLevel = {
     end: '',
     score: '',
     secret: '',
+    moves: 0,
     events: []
 };
 
@@ -61,7 +62,7 @@ export const useGameStore = defineStore('game', {
             players: [],
             fullscreen: false,
             sound: true,
-            level: initialLevel,
+            level: raw(initialLevel),
             levels: [],
             log: {
                 start: '',

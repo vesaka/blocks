@@ -1,7 +1,6 @@
 import Model from '$core/3d/models/three-model';
 import {
-    Object3D, Raycaster,
-    Mesh, MeshPhongMaterial, Vector2, Vector3, Box3, MathUtils
+    Object3D, Mesh, MeshPhongMaterial, Vector3, Box3, MathUtils
 } from 'three';
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 
@@ -104,8 +103,8 @@ class Block extends Model {
         this.$listen({ pointer: ['drag'] });
         this.range = this.getRange();
 
-        this.$listen({block: ['released']});
-        this.$emit('block_grabed', this);
+        //this.$listen({block: ['released']});
+        this.$emit('block_grabbed', this);
 
     }
 
@@ -119,7 +118,7 @@ class Block extends Model {
         this.range = {};
         this.releaseSlots().bookSlots();
         this.$off('pointer_drag');
-        this.$emit('block_released');
+        this.$emit('block_released', this);
 
     }
 
@@ -138,7 +137,7 @@ class Block extends Model {
     }
 
     getRange(prop) {
-        const { table, size, goal, at, model: { position } } = this;
+        const { table, size, goal, model: { position } } = this;
 
         const goalSize = this.isLeader() ? goal.size[prop] : 0;
         let min = 0, max = table[prop] - size[prop];

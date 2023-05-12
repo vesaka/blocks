@@ -1,13 +1,13 @@
 import Game3D from '$lib/game/core/3d/game-main.js';
 import {
     PerspectiveCamera, Points, Vector3,
-    PointsMaterial, MathUtils, Color, BufferGeometry
+    PointsMaterial, MathUtils, Color, BufferGeometry, BufferAttribute
 } from 'three';
 
 import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
-
 import { getSize } from '$core/utils/window';
 import { Point } from 'pixi.js';
+
 class FireworksRenderer extends Game3D {
     constructor(options = {}) {
         super(options);
@@ -24,7 +24,8 @@ class FireworksRenderer extends Game3D {
 
     renderer_created(renderer) {
         const camera = this.options.camera;
-        this.camera = new PerspectiveCamera(camera.fov, this.width / this.height, camera.near, camera.far);
+        const size = getSize();
+        this.camera = new PerspectiveCamera(camera.fov, size.ratio, camera.near, camera.far);
         this.$emit('camera_created');
         this.camera.position.set(
             camera.position.x,
@@ -32,11 +33,12 @@ class FireworksRenderer extends Game3D {
             camera.position.z,
         );
 
-        renderer.setClearColor(0x111111, 1);
-        renderer.sortObjects = true;
+        this.camera.lookAt(this.scene.position);
 
+        renderer.setClearColor(0x111111, 1);
+useOrbitControls(this);
         if (this.settings.controls) {
-            //useOrbitControls(this);
+            //
         } else {
             //this.camera.lookAt(0, 250, -180);
         }
@@ -45,6 +47,7 @@ class FireworksRenderer extends Game3D {
 
     createFirework() {
         const { options, scene } = this;
+        const MAX_COUNT = 100;
         return {
             done: false,
             dest: [],
@@ -71,20 +74,33 @@ class FireworksRenderer extends Game3D {
                 const color = new Color;
                 color.setHSL(new MathUtils.randFloat(0.1, 0.9), 1, 0.9);
                 this.geometry = new BufferGeometry;
-                this.points = new Points(this.geometry, this.material);
+                const vertices = new Float32Array(MAX_COUNT * 3);
+                this.geometry.setAttribute('vertices', new BufferAttribute(vertices, 3));
+
+
+                this.points = new Points(this.geometry, this.material);                
                 this.geometry.colors = this.colors;
-                this.geometry.vertices.push(from);
+                this.addVertex(from);
                 this.dest.push(to);
                 this.colors.push(color);
+                //console.log(this.points)
                 scene.add(this.points);
+                return this;
+            },
+            addVertex(vector, i = 0) {
+                const vertices = this.geometry.getAttribute('vertices');
+                //console.log(this.geometry.attributes);
+                vertices.setXYZ(i, vector.x, vector.y, vector.y);
             },
             explode(vector) {
                 this.dest = [];
                 this.colors = [];
                 this.geometry = new BufferGeometry;
+                const vertices = new Float32Array(MAX_COUNT * 3);
+                this.geometry.setAttribute('vertices', new BufferAttribute(vertices, 3));
                 this.points = new Points(this.geometry, this.material);
 
-                for (var i = 0; i < 80; i++) {
+                for (var i = 0; i < MAX_COUNT; i++) {
                     var color = new Color;
                     color.setHSL(MathUtils.randFloat(0.1, 0.9), 1, 0.5);
                     this.colors.push(color);
@@ -99,9 +115,14 @@ class FireworksRenderer extends Game3D {
                         MathUtils.randInt(vector.y - 1000, vector.y + 1000),
                         MathUtils.randInt(vector.z - 1000, vector.z + 1000)
                     );
-                    this.geometry.vertices.push(from);
+
+                    
+                    this.addVertex(from, this.dest.length);
+                    //this.geometry.vertices.push(from);
                     this.dest.push(to);
                 }
+
+                
                 this.geometry.colors = this.colors;
                 scene.add(this.points);
             },
@@ -109,18 +130,25 @@ class FireworksRenderer extends Game3D {
                 if (!this.points || !this.geometry) {
                     return;
                 }
+                const vertices = this.geometry.getAttribute('vertices');
+                const total = this.dest.length;
 
-                const total = this.geometry.vertices.length;
                 for (let i = 0; i < total; i++) {
-                    this.geometry.vertices[i].x += (this.dest[i].x - this.geometry.vertices[i].x) / 20;
-                    this.geometry.vertices[i].y += (this.dest[i].y - this.geometry.vertices[i].y) / 20;
-                    this.geometry.vertices[i].z += (this.dest[i].z - this.geometry.vertices[i].z) / 20;
-                    this.geometry.verticesNeedUpdate = true;
+                    const x = vertices.getX(i);
+                    const y = vertices.getY(i);
+                    const z = vertices.getZ(i);
+                    
+                    vertices.setXYZ(i, x + (this.dest[i].x - x) / 20, y + (this.dest[i].y - y) / 20, z + (this.dest[i].z - z) / 20);
+                    vertices.needsUpdate = true;
                 }
                 // watch first particle for explosion 
                 if (total === 1) {
-                    if (Math.ceil(this.geometry.vertices[0].y) > (this.dest[0].y - 20)) {
-                        this.explode(this.geometry.vertices[0]);
+                    if (Math.ceil(vertices.getY(0)) > (this.dest[0].y - 20)) {
+                        this.explode({
+                            x: vertices.getX(0),
+                            y: vertices.getY(0),
+                            z: vertices.getZ(0),
+                        });
                         return;
                     }
                 }
@@ -148,7 +176,7 @@ class FireworksRenderer extends Game3D {
             renderer.render(scene, camera);
             if (MathUtils.randInt(1, 20) === 10) {
                 //console.log('add fireworks');
-                fireworks.push(this.createFirework());
+                fireworks.push(this.createFirework().launch());
             }
 
             for (var i = 0; i < fireworks.length; i++) {
@@ -157,8 +185,9 @@ class FireworksRenderer extends Game3D {
                     continue;
                 }
                 fireworks[i].update();
+                
             }
-
+// console.log({len: fireworks.length});
             camera.position.x += (to.x - camera.position.x) / 40;
             camera.position.y += (to.y - camera.position.y) / 40;
             camera.position.z += (to.z - camera.position.z) / 40;

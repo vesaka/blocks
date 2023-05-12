@@ -1,14 +1,4 @@
 import { raw, extend } from '$core/utils/object';
-import { tw } from './index';
-export const def = {
-    enterActive: '',
-    enterFrom: '',
-    enterTo: '',
-    leaveActive: '',
-    leaveFrom: '',
-    leaveTo: ''
-}
-
 const groups = [
     'enterActive', 'enterFrom', 'enterTo',
     'leaveActive', 'leaveFrom', 'leaveTo'

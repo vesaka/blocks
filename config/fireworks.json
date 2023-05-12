@@ -1,8 +1,8 @@
 {
     "camera": {
-        "fov": 45,
-        "near": 1,
-        "far": 1500,
+        "fov": 60,
+        "near": 0.1,
+        "far": 20000,
         "limit": 80,
         "position": {
             "x": 0,
@@ -13,7 +13,7 @@
     "renderer": {
         "alpha": true,
         "antialias": true,
-        "sortObjects": false,
+        "sortObjects": true,
         "shadowMap": {
             "enabled": true
         }

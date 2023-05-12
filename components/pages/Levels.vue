@@ -1,6 +1,6 @@
 <template>
     <FireWorks>
-        <Card>
+        <Card v-if="false">
 
         </Card>
     </FireWorks>

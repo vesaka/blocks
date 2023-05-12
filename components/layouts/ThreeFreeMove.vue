@@ -1,19 +1,14 @@
 <template>
     <div class="flex flex-col relative w-screen h-screen items-center justify-center">
-        <canvas ref="sky" class="flex fixed inset-0 bg-darkblue"></canvas>
+        <canvas ref="screen" class="flex fixed inset-0 bg-darkblue"></canvas>
         <slot></slot>
     </div>
 </template>
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import {
-    PerspectiveCamera, Vector3, Scene, FogExp2,
-    BufferGeometry, Texture, SRGBColorSpace,
-    Float32BufferAttribute, PointsMaterial, Points,
-    WebGLRenderer
+    PerspectiveCamera, Vector3, Scene, FogExp2, WebGLRenderer
 } from 'three';
-
-
 
 const props = defineProps({
     position: {
@@ -25,51 +20,35 @@ const props = defineProps({
     fov: {
         type: Number,
         default: 50,
+    },
+    sensitivity: {
+        type: Number,
+        default: 0.05
+    },
+    init: {
+        type: Function,
+        default: () => ({})
+    },
+    animate: {
+        type: Function,
+        default: () => ({})
     }
 });
-
 
 let camera, scene, renderer, stats, material;
 let mouseX = 0, mouseY = 0;
 let animationID;
 
-const sky = ref(null);
+const screen = ref(null);
 
 const init = () => {
     camera = new PerspectiveCamera();
     camera.position.z = 1000;
     scene = new Scene;
     scene.fog = new FogExp2(0x000000, 0.001);
-    const geometry = new BufferGeometry;
-    const vertices = [];
-
-    for (let i = 0; i < 1000; i++) {
-
-        const x = 2000 * Math.random() - 1000;
-        const y = 2000 * Math.random() - 1000;
-        const z = 2000 * Math.random() - 1000;
-
-        vertices.push(x, y, z);
-
-    }
-
-    geometry.setAttribute('position', new Float32BufferAttribute(vertices, 3));
-
-    material = new PointsMaterial({
-        size: 6,
-        sizeAttenuation: true,
-        color: 0xffffff,
-        map: createCircleTexture('#ffffff', 32),
-        transparent: true,
-        //depthWrite: false
-    });
-    material.color.setHSL(1.0, 0.3, 0.7, SRGBColorSpace);
-
-    const particles = new Points(geometry, material);
-    scene.add(particles);
 
     renderer = new WebGLRenderer({
-        canvas: sky.value,
+        canvas: screen.value,
         alpha: true,
         style: {
             background: '#f02f02'
@@ -79,14 +58,15 @@ const init = () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0x000000, 0.2);
 
+    props.init({renderer, camera, scene})
+
     document.body.style.touchAction = 'none';
     document.body.addEventListener('pointermove', onPointerMove);
 
     window.addEventListener('resize', onWindowResize);
+};
 
-}
-
-function onWindowResize() {
+const onWindowResize = () => {
 
     const windowHalfX = window.innerWidth / 2;
     const windowHalfY = window.innerHeight / 2;
@@ -98,49 +78,21 @@ function onWindowResize() {
 
 }
 
-function onPointerMove(event) {
-
-    if (event.isPrimary === false) return;
-
-    mouseX = event.clientX * 0.05;
-    mouseY = event.clientY * 0.05;
-
+const onPointerMove = ev => {
+    if (ev.isPrimary === false) return;
+    mouseX = ev.clientX * 0.05;
+    mouseY = ev.clientY * 0.05;
 }
-
-//
 
 function animate() {
     animationID = requestAnimationFrame(animate);
     const time = Date.now() * 0.00005;
     camera.position.x += (mouseX - camera.position.x) * 0.05;
     camera.position.y += (- mouseY - camera.position.y) * 0.05;
-
     camera.lookAt(scene.position);
-
-    //const h = (360 * (1.0 + time) % 360) / 360;
-    //material.color.setHSL(h, 0.5, 0.5);
-
+    props.animate();
     renderer.render(scene, camera);
 
-}
-
-function createCircleTexture(color, size) {
-    const matCanvas = document.createElement('canvas');
-    matCanvas.width = matCanvas.height = size;
-    const matContext = matCanvas.getContext('2d');
-    // create texture object from canvas.
-    const texture = new Texture(matCanvas);
-    // Draw a circle
-    const center = size * 0.5;
-    matContext.beginPath();
-    matContext.arc(center, center, size / 2, 0, 2 * Math.PI, false);
-    matContext.closePath();
-    matContext.fillStyle = color;
-    matContext.fill();
-    // need to set needsUpdate
-    texture.needsUpdate = true;
-    // return a texture made from the canvas
-    return texture;
 }
 
 onBeforeUnmount(() => {

@@ -7,9 +7,11 @@ import Leaderboard from '$blocks/components/pages/Leaderboard.vue';
 import Start from '$blocks/components/pages/Start.vue';
 import NotFound from '$blocks/components/pages/NotFound.vue';
 
+import Levels from '$blocks/components/pages/Levels.vue';
+
 import {
     BASE, LOGIN_PATH, PLAY_PATH, PAGE_404, SIGNUP_PATH,
-    LEADERBOARD, FORGOT_PASSWORD, RESET_PASSWORD,
+    LEADERBOARD, FORGOT_PASSWORD, RESET_PASSWORD, LEVELS_PATH
 } from './paths.js';
 
 const routes = [
@@ -65,6 +67,14 @@ const routes = [
         component: Playground,
         meta: {
             title: 'Playground'
+        }
+    },
+    {
+        path: LEVELS_PATH,
+        name: 'levels',
+        component: Levels,
+        meta: {
+            title: 'Levels'
         }
     },
     {

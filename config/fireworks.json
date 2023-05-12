@@ -1,0 +1,29 @@
+{
+    "camera": {
+        "fov": 45,
+        "near": 1,
+        "far": 1500,
+        "limit": 80,
+        "position": {
+            "x": 0,
+            "y": 0,
+            "z": 1000
+        }
+    },
+    "renderer": {
+        "alpha": true,
+        "antialias": true,
+        "sortObjects": false,
+        "shadowMap": {
+            "enabled": true
+        }
+    },
+    "material": {
+        "size": 16,
+        "color": "#ffffff",
+        "opacity": 1,
+        "vertexColors": true,
+        "transparent": true,
+        "depthTest": false
+    }
+}

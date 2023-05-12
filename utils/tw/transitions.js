@@ -62,7 +62,6 @@ export const tween = (name, extra = {}) => {
     for (const key of groups) {
         group[key] = (transition[key] || '') + (extra[key] || '');
     }
-    console.log(name, group);
     return group;
 };
 

@@ -10,7 +10,7 @@ import { rand } from '$core/utils/math';
 import MainBlock from './main-block';
 import HorizontalBlock from './horizontal-block';
 import VerticalBlock from './vertical-block';
-
+import { DragControls } from 'three/addons/controls/DragControls.js';
 import { boards } from '$blocks/config/puzzles.json';
 import gsap from 'gsap';
 
@@ -43,7 +43,7 @@ class Blocks extends Collection {
     createItems() {
         const {def, types, path} = this;
 
-
+        const draggableBlocks = [];
         for (let name in types) {
             const blockClass = MAP[name];
             if (!blockClass) {
@@ -63,11 +63,12 @@ class Blocks extends Collection {
             for (let i = 0; i < count; i++) {
                 const block = new blockClass(blockOptions);
                 this.add(block);
+                draggableBlocks.push(block.model);
             }
 
 
         }
-
+        console.log(draggableBlocks);
     }
 
     placeItems() {

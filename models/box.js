@@ -77,8 +77,7 @@ class Box extends Model {
         blocks.each(block => {
            this.model.add(block.model) 
         });
-        
-        this.$blocks = blocks;
+        this.$set('$blocks', blocks)
     }
     
     clearBlocks() {

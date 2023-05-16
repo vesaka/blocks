@@ -24,7 +24,6 @@ watch(() => gameStore.level.moves, n => {
     })
     .add(() => {
         moves = n
-        console.log(tl.progress())
     })
     .to(counter.value, {
         scale: 1

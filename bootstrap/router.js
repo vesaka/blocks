@@ -2,7 +2,7 @@ import { nextTick } from 'vue';
 import { createRouter, createWebHashHistory, createWebHistory  } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from './stores';
-import { PAGE_404 } from './paths';
+import { BASE, PAGE_404, LOGIN_PATH } from './paths';
 import routes from './routes';
 import { t } from '$core/utils/i18n';
 
@@ -24,10 +24,11 @@ router.beforeEach((to, from) => {
     
     const store = useAuthStore();
     const { loggedIn } = storeToRefs(store);
-    
-    if ((false === to.meta.shouldBeLoggedIn) && loggedIn.value) {
+    if ((false === to.meta.needsAuth) && loggedIn.value) {
         router.push(BASE);
-    }
+    } else if ((true === to.meta.needsAuth) && !loggedIn.value) {
+        router.push(LOGIN_PATH);
+    } 
 
 });
 

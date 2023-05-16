@@ -31,12 +31,7 @@ class Pointer extends Container {
 
         this.helper = new PlaneHelper( this.plane, 1000, 0xffbbff );
         this.arrowHelper = null;
-        
-        //this.scene.add(this.helper);
-        //this.toggleEvents();
         this.axis = new Line3;
-
-
         this.arrowHelper = null;
         this.createAxises();
 
@@ -126,10 +121,6 @@ class Pointer extends Container {
         this.updatePlane();
         this.plane.intersectLine(this.axis, this.target);
         this.$emit('pointer_start', this.pointer);
-        this.addEntry({
-            event: 'start',
-            at: this.target
-        });
     }
     
     onMove(ev) {
@@ -150,11 +141,6 @@ class Pointer extends Container {
             .updatePlane()
             .$emit('pointer_stop', this.pointer);
         
-        //this.$off('block_released');
-        this.addEntry({
-            event: 'release',
-            at: this.target
-        });
     }
     
     onOut(ev) {
@@ -190,25 +176,13 @@ class Pointer extends Container {
             plane.normal.set(1, 0, 0);
             this.constant = -(view.width) * 0.16;
             axis.copy(this.getRowAxis(block.row, at));
-            //axis.copy(this.rows[block.row])
         } else if ('y' === this.direction) {
             plane.normal.set(0, 0.64, 1);
             this.constant = -(view.height) * 0.25;
             axis.copy(this.getColAxis(block.col, at));
-            //axis.copy(this.cols[block.col]);
-
-
         }
-
-        // this.arrowHelper = new ArrowHelper(block.normal, axis.end, table.width*4);
-        // this.scene.add(this.arrowHelper)
         this.updatePlane();
-        
-        this.addEntry({
-            event: 'grab',
-            at: block.at
-        });
-        
+                
     }
     
     getCameraView() {
@@ -217,7 +191,6 @@ class Pointer extends Container {
         const fov = MathUtils.degToRad( camera.fov );
         const height = Math.round(2 * Math.tan( fov / 2 ) * (options.camera.far / 2));
         const width = Math.round(height * camera.aspect);
-
         return { width, height };
     }
        

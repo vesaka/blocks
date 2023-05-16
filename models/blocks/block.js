@@ -24,7 +24,6 @@ class Block extends Model {
         super(options);
         this.$listen({
             pointer: ['start', 'move', 'stop', 'out'],
-            //lucky: ['loaded'],
         });
 
         this.box = new Box3().setFromObject(this.model);
@@ -96,14 +95,12 @@ class Block extends Model {
 
     grab(cross) {
         this.at = this.model.worldToLocal(cross.point);
-        //this.at[this.axis] += (Cell.def.size * this.count) * 0.25;
         this.at[this.axis] += Cell.halfSize/2;
 
         this.setState(ACTIVE);
         this.$listen({ pointer: ['drag'] });
         this.range = this.getRange();
 
-        //this.$listen({block: ['released']});
         this.$emit('block_grabbed', this);
 
     }
@@ -232,11 +229,6 @@ class Block extends Model {
         });
 
     }
-
-    block_released() {
-     
-    }
-
 }
 
 const map = {

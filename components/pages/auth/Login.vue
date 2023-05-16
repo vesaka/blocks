@@ -28,27 +28,27 @@ import api from '$blocks/bootstrap/api.js';
 import { raw } from '$core/utils/object.js';
 
 import { t } from '$core/utils/i18n';
-import { asset, FORGOT_PASSWORD, BASE, PLAY_PATH, SIGNUP_PATH } from '$blocks/bootstrap/paths';
+import { FORGOT_PASSWORD, BASE, PLAY_PATH, SIGNUP_PATH } from '$blocks/bootstrap/paths';
 import { useAuthStore } from '$blocks/bootstrap/stores';
 import { useRouter } from 'vue-router';
-import { tw } from '$blocks/utils/tw';
 import { link } from '$blocks/utils/tw/button.tw';
 const authStore = useAuthStore();
 
 const auth = reactive({
     email: 'admin',
-    password: '!VesakaIsAdmin$',
+    password: 'veskracve',
     remember: false
 });
 
 const router = useRouter();
-
+console.log(authStore.user);
 const onSubmit = () => {
 
     return api.post('api/login', raw(auth), { withCredentials: true })
         .then(({ data }) => {
             api.setBearer(data.token);
-            // authStore.login(data);
+            data.isGuest = false;
+            authStore.login(data);
             // router.push(PLAY_PATH);
         });
 };

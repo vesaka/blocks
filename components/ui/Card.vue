@@ -1,9 +1,11 @@
 <template>
-    <div :class="tw(container, 'relative')">
+    <div :class="tw(container, 'relative mt-16')">
         <div :class="cardClass" style="transform: perspective(100px) rotateX(-2deg);">
             <div :class="innerCard"></div>
         </div>
-        <CardTitle class="w-5/6 absolute -top-28 sm:-top-24 md:-top-32" fill="#ff9955" :title="props.title"/>
+        <slot name="header">
+            <CardTitle class="w-5/6 absolute -top-28 sm:-top-24 md:-top-32" fill="#ff9955" :title="props.title"/>
+        </slot>
         <div class="flex flex-col absolute ">
             <slot></slot>
         </div>

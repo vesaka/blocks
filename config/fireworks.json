@@ -7,7 +7,7 @@
         "position": {
             "x": 0,
             "y": 0,
-            "z": 1000
+            "z": 0
         }
     },
     "renderer": {
@@ -18,8 +18,10 @@
             "enabled": true
         }
     },
+    "maxActive": 5,
+    "count": 100,
     "material": {
-        "size": 16,
+        "size": 10,
         "color": "#ffffff",
         "opacity": 1,
         "vertexColors": true,

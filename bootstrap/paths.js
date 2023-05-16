@@ -8,7 +8,8 @@ export const PAGE_404 = '/404';
 export const FORGOT_PASSWORD = '/forgot-password';
 export const RESET_PASSWORD = '/reset-password';
 export const LEVELS_PATH = '/levels';
-
+export const SUCCESS_PATH = '/sucess';
+export const COMPLETED = '/completed';
 let START = app.url === window.location.host ? window.location.origin + app.theme : '';
 export const svg = path => {
     return `${START}/assets/svg/${path}.svg`;

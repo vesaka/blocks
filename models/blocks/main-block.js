@@ -23,11 +23,9 @@ class MainBlock extends HorizontalBlock {
     
     block_released() {
         const { goal, model } = this;
-
         if ((goal.position.x === model.position.x) && (goal.position.y === model.position.y)) {
-            this.$emit('game_over', 'won');
+            this.$emit('goal_reached');
         }
-        console.log(goal.position, this.model.position);
     }
 
 }

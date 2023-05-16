@@ -1,10 +1,11 @@
 import { defineStore } from 'pinia';
 import { raw, extend, isObject } from '$core/utils/object.js';
-import { FREE_PLAY, COMPETITION } from './constants.js'
-export const LOADING = 'loading';
-export const READY = 'ready';
-export const PLAYING = 'playing';
-export const FINISHED = 'finished';
+import localforage from 'localforage';
+import { 
+    FREE_PLAY, COMPETITION, LOADING,
+     READY, PLAYING, FINISHED 
+} from './constants.js'
+
 
 export const gameStates = [LOADING, READY, PLAYING, FINISHED];
 export const modes = ['free', 'competition'];
@@ -38,7 +39,12 @@ export const useAuthStore = defineStore('$auth$', {
     },
     persist: {
         enabled: true,
-        
+        strategies: [
+            {
+                storage: localStorage,
+                paths: ['user']
+            }
+        ]
     }
 });
 
@@ -46,73 +52,53 @@ const initialLevel = {
     current: 1,
     start: '',
     end: '',
-    score: '',
+    stars: 1,
     secret: '',
     moves: 0,
+    optimalMoves: 0,
     events: []
 };
 
 export const useGameStore = defineStore('game', {
     state: () => {
         return {
-            score: 0,
-            bestScore: 0,
             state: LOADING,
-            mode: 'free',
+            mode: FREE_PLAY,
             players: [],
             fullscreen: false,
             sound: true,
             level: raw(initialLevel),
-            levels: [],
-            log: {
-                start: '',
-                end: '',
-                score: '',
-                secret: '',
-                entries: []
-            }
+            levels: []
         };
     },
     actions: {
-        updateTime(delta) {
-            const { current, max, min } = this.time;
-            if(this.time.current >= this.time.min) {
-                this.time.current -= delta;
-                if (this.time.current < this.time.min) {
-                    this.time.current = this.time.min;
-                }
-            }
-        },
-        updateScore(score) {
-            this.score = Math.max(this.score + score, 0);
-        },
-        updateBestScore() {
-            
-        },
         updateMode(mode) {
             if ([FREE_PLAY, COMPETITION].includes(mode)) {
-                this.state.mode = mode;
+                this.mode = mode;
             }
         },
-        resetAll() {            
-            const score = this.score;
-        },
-        resetLevel() {
-            const { current, moves } = this.state.level;
-            this.state.level = extend(this.state.level, {
-                current, moves
+        startLevel(level, bestMoves) {
+            this.state = PLAYING;
+            this.level = extend(initialLevel, {
+                current: level,
+                optimalMoves: bestMoves,
+                start: Math.round(new Date().getTime() / 1000)
             });
         },
-        startLevel(level, moves) {
-            this.state.level = extend(this.state.level, {
-                current: level, moves
-            });
-        },
-        setState(state) {
-            this.state = state;
-        },
-        addEntry(entry) {
-            this.state.log.entries.push(entry);
+        endLevel(data = {}) {
+            this.level = extend(this.level, data);
+            let lvl = this.levels.find(lvl => {
+                return lvl.current === this.level.current;
+            })
+
+            if (lvl) {
+                // lvl = raw(this.level);
+                Object.assign(lvl, raw(this.level));
+            } else {
+                this.levels.push(raw(this.level));
+            }
+
+            this.state = FINISHED;
         }
     },
     getters: {
@@ -125,10 +111,22 @@ export const useGameStore = defineStore('game', {
             return (status) => {
                 return state.state === status;
             };
+        },
+        myLevels(state) {
+            return state.levels.sort((a, b) => {
+                return a.current - b.current;
+            });
         }
     },
     persist: {
-        enabled: false,
+        enabled: true,
+        startegies: [
+            {
+                key: 'game',
+                storage: localStorage,
+                paths: ['mode', 'players', 'sound', 'level', 'levels']
+            }
+        ]
     }
 });
 

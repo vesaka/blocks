@@ -35,15 +35,9 @@
 </template>
 <script setup>
 import { computed, ref, watch } from 'vue';
-
-import { asset } from '$blocks/bootstrap/paths.js';
-
 import { useRouter } from 'vue-router';
-import { raw } from '$core/utils/object';
 import { t } from '$core/utils/i18n';
-import { tw } from '$blocks/utils/tw';
-import { header, sbm } from '$blocks/utils/tw/form.tw';
-import { input } from '$blocks/utils/tw/input.tw';
+import { isObject } from '$core/utils/object';
 import { useErrorStore } from '$blocks/bootstrap/stores';
 import Card from '$blocks/components/ui/Card.vue';
 import GameButton from './GameButton.vue';
@@ -83,7 +77,7 @@ const props = defineProps({
     },
 });
 
-watch(props.auth, (n) => {
+watch(() => props.auth, (n) => {
     error.value = '';
 });
 
@@ -96,9 +90,10 @@ const onSubmit = () => {
             const newErrors = {};
             for (let name in response.data.errors) {
                 const error = response.data.errors[name];
-                newErrors[name] = t(`messages.${name}.${error[0].rule}`)
+                const rule = isObject(error[0]) ? error[0].rule : error[0]; 
+                newErrors[name] = t(`messages.${name}.${rule}`)
             }
-            console.log(newErrors);
+            console.log(response.data, newErrors);
             errors.update(newErrors);
         }
     })

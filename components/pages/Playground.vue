@@ -8,7 +8,8 @@
     </div>
 </template>
 <script setup>
-    import { ref, onMounted, onBeforeUnmount } from 'vue';
+    import { ref, onMounted, onBeforeUnmount, watch } from 'vue';
+    import { useRouter, useRoute } from 'vue-router';
     import BlocksGame from '$blocks/blocks-game';
     import ResizeMixin from '$core/3d/mixins/resize-mixin.js';
     import StatesMixin from '$core/mixins/states-mixin.js';
@@ -19,11 +20,29 @@
     import options from '$blocks/config/options.json';
     import settings from '$blocks/config/settings.json';
     import assets from '$blocks/config/assets.json';
+    import { FINISHED, FREE_PLAY, COMPETITION } from '$blocks/bootstrap/constants';
+    import { LEVELS_PATH, SUCCESS_PATH } from '$blocks/bootstrap/paths';
     import { useGameStore, useAuthStore } from '$blocks/bootstrap/stores.js';
     
     const store = useGameStore();
+    const router = useRouter();
+    const route = useRoute();
     const canvas = ref(null);
     let game = null;
+
+    watch(() => store.state, (state) => {
+        
+        if (FINISHED === state) {
+            const { redirects } = route.meta;
+
+            if (redirects[store.mode]) {
+                router.push(redirects[store.mode]);
+            }
+        }
+
+        
+
+    })
     onMounted(() => {
         game = new BlocksGame({
             canvas: canvas.value,
@@ -33,8 +52,10 @@
             mixins: [ResizeMixin, StatesMixin]
         });
         game.load();
-
-        setTimeout(() => game.startLevel(), 300);
+        if (game) {
+            setTimeout(() => game.startLevel(store.level.current), 300);
+        }
+        
     });
 
     onBeforeUnmount(() => {

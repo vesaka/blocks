@@ -109,7 +109,8 @@
         "email": {
             "required": "Email is required",
             "invalid": "Email is invalid",
-            "exists": "Email was already taken"
+            "exists": "Email was already taken",
+            "not_found": "User not found or wrong password"
         },
         "password": {
             "required": "Password is required",

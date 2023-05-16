@@ -1,5 +1,6 @@
 {
     "controls": false,
+    "bot": false,
     "app": {
     },
     "assets": {

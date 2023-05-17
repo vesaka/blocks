@@ -12,7 +12,7 @@ import {
     Float32BufferAttribute, PointsMaterial, Points,
     WebGLRenderer
 } from 'three';
-
+import WebGL from 'three/addons/capabilities/WebGL.js';
 
 
 const props = defineProps({
@@ -36,6 +36,9 @@ let animationID;
 const sky = ref(null);
 
 const init = () => {
+    if(!WebGL.isWebGLAvailable()) {
+        return;
+    }
     camera = new PerspectiveCamera();
     camera.position.z = 1000;
     scene = new Scene;
@@ -68,17 +71,20 @@ const init = () => {
     const particles = new Points(geometry, material);
     scene.add(particles);
 
-    renderer = new WebGLRenderer({
-        canvas: sky.value,
-        alpha: true,
-        style: {
-            background: '#f02f02'
-        }
-    });
-    renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0.2);
+    try {
 
+        
+        renderer = new WebGLRenderer({
+            canvas: sky.value,
+            alpha: true,
+            style: {
+                background: '#f02f02'
+            }
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0.2);
+    } catch (err) {}
     document.body.style.touchAction = 'none';
     document.body.addEventListener('pointermove', onPointerMove);
 
@@ -127,18 +133,23 @@ function animate() {
 function createCircleTexture(color, size) {
     const matCanvas = document.createElement('canvas');
     matCanvas.width = matCanvas.height = size;
-    const matContext = matCanvas.getContext('2d');
+    const matContext = matCanvas.getContext('2d') || {};
     // create texture object from canvas.
     const texture = new Texture(matCanvas);
     // Draw a circle
-    const center = size * 0.5;
-    matContext.beginPath();
-    matContext.arc(center, center, size / 2, 0, 2 * Math.PI, false);
-    matContext.closePath();
-    matContext.fillStyle = color;
-    matContext.fill();
-    // need to set needsUpdate
-    texture.needsUpdate = true;
+    if (matContext.beginPath) {
+
+
+        const center = size * 0.5;
+        matContext.beginPath();
+        matContext.arc(center, center, size / 2, 0, 2 * Math.PI, false);
+        matContext.closePath();
+        matContext.fillStyle = color;
+        matContext.fill();
+
+        // need to set needsUpdate
+        texture.needsUpdate = true;
+    }
     // return a texture made from the canvas
     return texture;
 }
@@ -152,7 +163,10 @@ onBeforeUnmount(() => {
 
 onMounted(() => {
     init();
-    animate();
+    if (renderer){
+        animate();
+    }
+    
 });
 
 </script>

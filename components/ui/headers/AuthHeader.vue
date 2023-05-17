@@ -16,7 +16,7 @@
 </template>
 <script setup>
     import { tw } from '$blocks/utils/tw';
-    import { btnPrimary, btn, sbm } from '$blocks/utils/tw/button.tw';
+    import { btnPrimary, btn } from '$blocks/utils/tw/button.tw';
     import { t } from '$core/utils/i18n';
     import { useAuthStore } from '$blocks/bootstrap/stores';
     import { useRouter } from 'vue-router';

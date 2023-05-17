@@ -1,4 +1,4 @@
-import Game3D from '$lib/game/core/3d/game-main.js';
+import Game3D from '$core/3d/game-main.js';
 import {
     PerspectiveCamera, Clock, HemisphereLight
 } from 'three';

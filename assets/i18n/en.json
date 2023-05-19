@@ -25,7 +25,9 @@
             "play-as-guest": "Play as guest",
             "login": "Login",
             "free-play": "Free Play",
-            "play": "Play"
+            "play": "Play",
+            "select": "Select Level", 
+            "settings": "Settings"
         },
         "no-account": "No Account?",
         "register": "Sign Up"
@@ -73,6 +75,16 @@
     "thank-you": {
         "title": "thank you<br>for registering",
         "play": "play game"
+    },
+    "levels": {
+        "title": "Select Level",
+        "level": "Level",
+        "result": {
+            "good_job": "Good Job!",
+            "welldone": "Weldone!",
+            "excellent": "Excellent!",
+            "fantastic": "Fantastic"
+        }
     },
     "leaderboard": {
         "title": "Game Leaders",

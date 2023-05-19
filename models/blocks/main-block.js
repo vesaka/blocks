@@ -3,6 +3,9 @@ class MainBlock extends HorizontalBlock {
 
     constructor(options) {
         super(options);
+        this.$listen({
+            block: ['released']
+        })
     }
 
     filter_position(position) {        
@@ -21,8 +24,11 @@ class MainBlock extends HorizontalBlock {
         return range;
     }
     
-    block_released() {
-        const { goal, model } = this;
+    block_released(block) {
+        if (block.id !== this.id) {
+            return;
+        }
+        const { goal, model } = this; 
         if ((goal.position.x === model.position.x) && (goal.position.y === model.position.y)) {
             this.$emit('goal_reached');
         }

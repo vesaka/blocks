@@ -6,7 +6,7 @@
         <slot name="header">
             <CardTitle class="w-5/6 absolute -top-28 sm:-top-24 md:-top-32" fill="#ff9955" :title="props.title"/>
         </slot>
-        <div class="flex flex-col absolute ">
+        <div class="flex flex-col z-20 h-full w-full items-center justify-center">
             <slot></slot>
         </div>
     </div>

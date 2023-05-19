@@ -43,6 +43,8 @@ class Level extends Container {
                 x: block.row,
                 y: block.col  
             });
+
+
         }
     }
 

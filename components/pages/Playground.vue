@@ -31,7 +31,7 @@
     let game = null;
 
     watch(() => store.state, (state) => {
-        
+        console.log(state);
         if (FINISHED === state) {
             const { redirects } = route.meta;
 

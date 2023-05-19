@@ -1,32 +1,18 @@
 <template>
     <NightSky>
-
         <Card title="Home">
-            <div class="flex flex-col" v-if="!auth.loggedIn">
-                <RouterLink :to="PLAY_PATH">
-                    <GameButton color="yellow">
-                        <span v-html="t('home.btn.play-as-guest')"></span>
-                    </GameButton>
-                </RouterLink>
-                <RouterLink :to="LOGIN_PATH">
-                    <GameButton color="green">
-                        <span v-html="t('home.btn.login')"></span>
-                    </GameButton>
-                </RouterLink>
-            </div>
-            <div class="flex flex-col" v-else>
-                <RouterLink :to="PLAY_PATH">
-                    <GameButton>
-                        <span v-html="t('home.btn.free-play')"></span>
-                    </GameButton>
-                </RouterLink>
-                <RouterLink :to="PLAY_PATH">
-                    <GameButton>
-                        <span v-html="t('home.btn.play')"></span>
-                    </GameButton>
-                </RouterLink>
-            </div>
-
+            <RouterLink :to="PLAY_PATH" class="mb-4 text-center">
+                <GameButton color="yellow" :content="t('home.btn.play')"/>
+            </RouterLink>
+            <RouterLink :to="LEVELS_PATH" class="mb-4 text-center">
+                <GameButton color="yellow" :content="t('home.btn.select')"/>
+            </RouterLink>
+            <RouterLink :to="LOGIN_PATH" class="mb-4 text-center" v-if="!auth.loggedIn">
+                <GameButton color="red" :content="t('home.btn.login')"/>
+            </RouterLink>
+            <RouterLink :to="PLAY_PATH" class="mb-4 text-center" v-else>
+                <GameButton :content="t('home.btn.free-play')"/>
+            </RouterLink>
         </Card>
     </NightSky>
 </template>
@@ -35,7 +21,7 @@ import { useAuthStore } from '$blocks/bootstrap/stores';
 import NightSky from '$blocks/components/ui/NightSky.vue';
 import Card from '../ui/Card.vue';
 import GameButton from '$blocks/components/ui/GameButton.vue';
-import { LOGIN_PATH, SIGNUP_PATH, PLAY_PATH } from '$blocks/bootstrap/paths';
+import { LOGIN_PATH, SIGNUP_PATH, PLAY_PATH, LEVELS_PATH } from '$blocks/bootstrap/paths';
 import { t } from '$core/utils/i18n';
 const auth = useAuthStore();
 

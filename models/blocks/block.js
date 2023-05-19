@@ -78,6 +78,8 @@ class Block extends Model {
         return model;
     }
 
+    get isMain() { return 1 === this.id; }
+
     isLeader() {
         return LEADER === this.type;
     }

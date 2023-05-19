@@ -83,7 +83,11 @@ const routes = [
         component: Levels,
         meta: {
             title: 'Levels'
-        }
+        },
+        beforeEnter: [(to, from, next) => {
+            to.meta.justPlayed = PLAY_PATH === from.path;
+            next();
+        }]
     },
     {
         path: LEADERBOARD,

@@ -3,7 +3,7 @@
         inkscape:export-filename="bitmap.svg" inkscape:export-xdpi="96" inkscape:export-ydpi="96"
         xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
         xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg"
-        xmlns:svg="http://www.w3.org/2000/svg">
+        xmlns:svg="http://www.w3.org/2000/svg" class="z-10">
         
 
         <g inkscape:label="Layer 1" inkscape:groupmode="layer" id="layer1" inkscape:path-effect="#path-effect1656"

@@ -6,7 +6,7 @@
                 <span class="btn-overlay top"></span>
                 <span class="btn-overlay bottom"></span>
                 <div class="relative">
-                    <slot></slot>
+                    <slot><span v-html="content"></span></slot>
                 </div>
                 
             </span>
@@ -17,6 +17,10 @@ const props = defineProps({
     color: {
         type: String,
         default: 'red'
+    },
+    content: {
+        type: String,
+        default: ''
     }
 });
 

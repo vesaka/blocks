@@ -2,6 +2,7 @@ import Container from '$core/container';
 import { boards } from '$blocks/config/puzzles.json';
 import { unserialize, raw } from '$core/utils/object';
 import { FINISHED } from '$blocks/bootstrap/constants';
+import api from '$blocks/bootstrap/api';
 
 class Level extends Container {
     constructor(options) {
@@ -23,6 +24,10 @@ class Level extends Container {
         board.blocks = board.blocks.map(unserialize);
         this.$store.startLevel(levelNumber, levelMoves);
         this.$emit('level_loaded', board);
+
+        api.post('api/play/start')
+            .then()
+            .catch()
     }
 
     block_grabbed(block) {

@@ -1,6 +1,6 @@
 <template>
     <FireWorks>
-        <Card class="items-center w-4/5 lg:w-2/3 lg:min-h-2/3" :title="t('levels.title')">
+        <Card class="items-center lg:w-3/4 xl:w-1/2" :title="t('levels.title')">
             <template #header>
                 <Stars v-if="route.meta.justPlayed" class="absolute -top-24 z-10" :count="options.count"
                     :inner-radius="options.innerRadius" :outer-radius="options.outerRadius" :beams="options.beams"
@@ -41,14 +41,14 @@ const route = useRoute();
 
 console.log(route.meta);
 // const gui = new GUI;
-// const options = reactive({
-//     innerRadius: 35,
-//     outerRadius: 70,
-//     count: 3,
-//     beams: 5,
-//     score: 0.5
+const options = reactive({
+    innerRadius: 35,
+    outerRadius: 70,
+    count: 3,
+    beams: 5,
+    score: 0.5
 
-// });
+});
 
 // gui.add(options, 'innerRadius', 5, 100, 1);
 // gui.add(options, 'outerRadius', 5, 100, 1);
@@ -60,7 +60,7 @@ const btnLevel = {
     'px-4 py-2 m-2': true,
     'bg-coconut': true,
     'border-2 border-jasperorange rounded-2xl': true,
-    'w-16 h-16 md:w-24 md:h-20 md:h-24 sm:w-auto': true,
+    'w-24 h-20 md:w-24 md:h-20 sm:w-auto': true,
     'flex flex-col items-center content-center justify-center': true,
     'transition duration-300 hover:scale-110': true
 };

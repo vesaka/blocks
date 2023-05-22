@@ -14,10 +14,10 @@
 </template>
 <script setup>
 import { computed, ref } from 'vue';
-import { useAuthStore } from './bootstrap/stores';
-import api from '$blocks/bootstrap/api.js';
 import { setLocales } from '$core/utils/i18n';
-import en from './assets/i18n/en.json';
+import { useAuthStore } from '$blocks/bootstrap/stores';
+import api from '$blocks/bootstrap/api.js';
+import en from '$blocks/assets/i18n/en.json';
 import env from '$blocks/bootstrap/imports.js';
 import { tween } from '$blocks/utils/tw/transitions';
 import { useRoute } from 'vue-router';
@@ -34,10 +34,14 @@ const auth = useAuthStore();
 
 api.connect({
     url: env.VITE_BASE_URL,
-    csrfPath: 'sanctum/csrf-cookie'
+    csrfPath: 'sanctum/csrf-cookie',    
 }).then(() => {
-    api.setBearer(auth.user.token);
-    api.get('api/user')
+    api.setBearer(auth.user.token)
+        .setDefaultParams({
+            _gk: env.VITE_GAME_KEY
+        })
+        .get('api/player');
+
     ready.value = true
 });
 setLocales({ en });

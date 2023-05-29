@@ -1,5 +1,5 @@
 <template>
-    <RouterView v-slot="{ Component, route }" v-if="ready">
+    <RouterView v-slot="{ Component }" v-if="ready">
         <AuthHeader/>
         <transition
              :enter-active-class="animate.enterActive"
@@ -16,15 +16,14 @@
 import { computed, ref } from 'vue';
 import { setLocales } from '$core/utils/i18n';
 import { useAuthStore } from '$blocks/bootstrap/stores';
+import { HEADER_GAME_NAME } from '$blocks/bootstrap/constants';
 import api from '$blocks/bootstrap/api.js';
 import en from '$blocks/assets/i18n/en.json';
 import env from '$blocks/bootstrap/imports.js';
 import { tween } from '$blocks/utils/tw/transitions';
-import { useRoute } from 'vue-router';
 
 import AuthHeader from './components/ui/headers/AuthHeader.vue';
 
-const route = useRoute();
 const animate = computed(() => {
     return tween('slide');
 });
@@ -34,16 +33,22 @@ const auth = useAuthStore();
 
 api.connect({
     url: env.VITE_BASE_URL,
-    csrfPath: 'sanctum/csrf-cookie',    
+    headers: {
+        [env.VITE_GAME_HEADER_NAME]: env.VITE_GAME_KEY
+    }  
 }).then(() => {
     api.setBearer(auth.user.token)
-        .setDefaultParams({
-            _gk: env.VITE_GAME_KEY
-        })
-        .get('api/player');
+        .setDefaultParams({_gk: env.VITE_GAME_KEY})
+        .get('api/player')
+        .catch(err => {
+            if (401 === err.response.status) {
+                auth.logout();
+            }
+        });
 
     ready.value = true
 });
+
 setLocales({ en });
 
 </script>

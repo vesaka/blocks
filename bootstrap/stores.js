@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { raw, extend, isObject } from '$core/utils/object.js';
-import localforage from 'localforage';
+
 import { 
     FREE_PLAY, COMPETITION, LOADING,
      READY, PLAYING, FINISHED 
@@ -20,13 +20,11 @@ export const useAuthStore = defineStore('$auth$', {
     }),
     actions: {
         login(user) {
-            //this.user = user;
             for (let key in this.user) {
                 if (user.hasOwnProperty(key)) {
                     this.user[key] = user[key];
                 }
-            }
-            
+            }            
         },
         async logout() {
             this.$reset();
@@ -64,7 +62,7 @@ export const useGameStore = defineStore('game', {
         return {
             state: LOADING,
             mode: FREE_PLAY,
-            players: [],
+            players: null,
             fullscreen: false,
             sound: true,
             level: raw(initialLevel),
@@ -91,14 +89,19 @@ export const useGameStore = defineStore('game', {
                 return lvl.current === this.level.current;
             })
 
+            const levelToSave = raw(this.level);
             if (lvl) {
-                // lvl = raw(this.level);
-                Object.assign(lvl, raw(this.level));
+                if (0 < lvl.moves) {
+                    levelToSave.moves = Math.min(lvl.moves, levelToSave.moves);
+                }
+                Object.assign(lvl, levelToSave);
             } else {
-                this.levels.push(raw(this.level));
+                lvl = raw(this.level);
+                this.levels.push(lvl);
             }
 
             this.state = FINISHED;
+            return lvl;
         }
     },
     getters: {

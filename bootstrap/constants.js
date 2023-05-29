@@ -7,3 +7,4 @@ export const PLAYING = 'playing';
 export const FINISHED = 'finished';
 
 export const GAME_KEY = 'unblockme';
+export const HEADER_GAME_NAME = 'X-Game-Type';

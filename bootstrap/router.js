@@ -22,8 +22,7 @@ router.beforeEach((to, from) => {
          return;
     }
     
-    const store = useAuthStore();
-    const { loggedIn } = storeToRefs(store);
+    const { loggedIn } = storeToRefs(useAuthStore());
     if ((false === to.meta.needsAuth) && loggedIn.value) {
         router.push(BASE);
     } else if ((true === to.meta.needsAuth) && !loggedIn.value) {

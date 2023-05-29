@@ -15,6 +15,7 @@ class Level extends Container {
         });
 
         this.startAt = null;
+        this.session = {}
     }
 
     load(levelNumber = 1) {
@@ -26,8 +27,10 @@ class Level extends Container {
         this.$emit('level_loaded', board);
 
         api.post('api/play/start')
-            .then()
-            .catch()
+            .then(res => {
+                this.session = res.data;
+            })
+            .catch();
     }
 
     block_grabbed(block) {
@@ -62,10 +65,19 @@ class Level extends Container {
             Math.ceil((level.moves - level.optimalMoves) / game.level.rate)
         )
         
-        this.$store.endLevel({
+        const savedLevel = this.$store.endLevel({
             stars: Math.max(stars, level.stars),
             end: Math.round(new Date().getTime() / 1000),
             events: this.history || []
+        });
+
+        api.post('api/play/end', {
+            sid: this.session.id,
+            result: {
+                level: savedLevel.current,
+                score: savedLevel.stars,
+                moves: savedLevel.moves
+            }
         });
         this.$emit('level_end');
         this.$store.state = FINISHED;

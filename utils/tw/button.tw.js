@@ -22,6 +22,7 @@ export const btnPrimary = {
 };
 
 export const link = {
+    'w-1/2 md:w-1/4': true,
     'mb-2 inline-block': true,
     'text-base text-coconut': true,
     'hover:text-blue-500 hover:underline': true

@@ -30,8 +30,8 @@ const rowClass = {
 }
 const gameStore = useGameStore();
 
-const players = gameStore.players;
-console.log(players);
+const players = computed(() => gameStore.players);
+console.log(players.value);
 const getPlayers = () => {
     api.get('api/leaderboard')
     .then(res => {
@@ -39,10 +39,10 @@ const getPlayers = () => {
     });
 };
 
-if (!players) {
+if (!players.value) {
     getPlayers();
 }
 
-//setInterval(getPlayers, 60000);
+setInterval(getPlayers, 60000);
 
 </script>

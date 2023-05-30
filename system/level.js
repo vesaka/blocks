@@ -73,9 +73,10 @@ class Level extends Container {
 
         api.post('api/play/end', {
             sid: this.session.id,
+            game_id: this.session.game_id,
+            score: savedLevel.stars,
             result: {
                 level: savedLevel.current,
-                score: savedLevel.stars,
                 moves: savedLevel.moves
             }
         });

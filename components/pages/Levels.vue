@@ -17,7 +17,7 @@
 
                     <Stars :count="game.level.stars" :inner-radius="7" :outer-radius="12"
                         :score="level.stars / game.level.stars" />
-                </button>
+                </button> 
 
             </div>
         </Card>
@@ -28,19 +28,17 @@ import { reactive, computed } from 'vue';
 import FireWorks from '$blocks/components/layouts/FireWorks.vue';
 import Card from '$blocks/components/ui/Card.vue';
 import Stars from '$blocks/components/ui/headers/Stars.vue';
-import GUI from 'lil-gui';
 import { t } from '$core/utils/i18n';
 import { useGameStore } from '$blocks/bootstrap/stores';
 import { game } from '$blocks/config/options.json';
 import { useRouter, useRoute } from 'vue-router';
 import { PLAY_PATH } from '$blocks/bootstrap/paths';
 
+
 const store = useGameStore();
 const router = useRouter();
 const route = useRoute();
 
-console.log(route.meta);
-// const gui = new GUI;
 const options = reactive({
     innerRadius: 35,
     outerRadius: 70,
@@ -49,12 +47,6 @@ const options = reactive({
     score: 0.5
 
 });
-
-// gui.add(options, 'innerRadius', 5, 100, 1);
-// gui.add(options, 'outerRadius', 5, 100, 1);
-// gui.add(options, 'count', 3, 10, 1);
-// gui.add(options, 'beams', 2, 32, 1);
-// gui.add(options, 'score', 0, 1, 0.01);
 
 const btnLevel = {
     'px-4 py-2 m-2': true,
@@ -88,9 +80,5 @@ const levels = computed(() => {
 
     return list;
 });
-
-// beforeRouteEnter(to, from) {
-//     console.log(to, from)
-// };
 
 </script>

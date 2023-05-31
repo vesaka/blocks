@@ -12,13 +12,24 @@
             </div>
             <div v-else>No Results Yet</div>
         </div>
+
+        <div class="flex flex-col md:flex-row mt-4">
+            <GameButton :content="t('leaderboard.restart')" @click="startLevel(gameStore.level.current)" color="yellow"
+                class="mx-2"></GameButton>
+            <GameButton :content="t('leaderboard.select')" @click="goToLevelsScreen" color="red" class="mx-2"></GameButton>
+        </div>
     </NightSky>
 </template>
 <script setup>
-import { reactive, computed } from 'vue';
+import { computed, onBeforeMount, onBeforeUnmount } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useGameStore } from '$blocks/bootstrap/stores';
+
+import { t } from '$core/utils/i18n';
 import api from '$blocks/bootstrap/api';
 import NightSky from '$blocks/components/ui/NightSky.vue';
+import GameButton from '$blocks/components/ui/GameButton.vue';
+import { startLevel, goToLevelsScreen } from '$blocks/utils/level.util';
 
 const rowClass = {
     'flex flex-row': true,
@@ -31,18 +42,27 @@ const rowClass = {
 const gameStore = useGameStore();
 
 const players = computed(() => gameStore.players);
-console.log(players.value);
+
 const getPlayers = () => {
     api.get('api/leaderboard')
-    .then(res => {
-        gameStore.players = res.data;
-    });
+        .then(res => {
+            gameStore.players = res.data;
+        });
 };
 
-if (!players.value) {
-    getPlayers();
-}
 
-setInterval(getPlayers, 60000);
 
+let getPlayersIntevalId;
+
+onBeforeMount(() => {
+    if (!players.value) {
+        getPlayers();
+    }
+
+    getPlayersIntevalId = setInterval(getPlayers, 60000);
+});
+
+onBeforeUnmount(() => {
+    clearInterval(getPlayersIntevalId)
+});
 </script>

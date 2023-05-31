@@ -27,3 +27,11 @@ export const link = {
     'text-base text-coconut': true,
     'hover:text-blue-500 hover:underline': true
 };
+
+export const icon = {
+    'h-14 w-14 hover:h-16 hover:w-16': true,
+    'transform origin-center': true,
+    'duration-300': true,
+    'bg-jasperorange text-coconut p-2': true,
+    'border-2 border-coconut rounded-full': true
+};

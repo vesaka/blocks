@@ -79,6 +79,7 @@
     "levels": {
         "title": "Select Level",
         "level": "Level",
+        "next": "Next Level",
         "result": {
             "good_job": "Good Job!",
             "welldone": "Weldone!",
@@ -89,6 +90,8 @@
     "leaderboard": {
         "title": "Game Leaders",
         "play": "play again",
+        "restart": "Restart Level",
+        "select": "Select Level",
         "headers": {
             "rank": "rank",
             "username": "username",

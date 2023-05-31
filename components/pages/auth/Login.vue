@@ -9,18 +9,18 @@
                 <TickCheckbox class="pt-4 mx-auto justify-center" v-model="auth.remember"
                     :text="t('login.remember', 'Remember me')" />
                 <p class="pt-4 text-center">
-                    <RouterLink :class="link" :to="SIGNUP_PATH"
-                        v-html="t('login.with-account', 'Have an Account? Click Here')"></RouterLink>
+                    <RouterLink :to="SIGNUP_PATH"
+                        v-html="t('login.with-account', 'Dont\'t have an Account? Click Here')"></RouterLink>
                 </p>
                 <p class="pt-4 text-center" v-if="true">
-                    <RouterLink :class="link" :to="FORGOT_PASSWORD"
+                    <RouterLink :to="FORGOT_PASSWORD"
                         v-html="t('login.forgot-password', 'Forgot your password?')"></RouterLink>
                 </p>
             </template>
         </AuthForm>
 </template>
 <script setup>
-import { reactive, watch } from 'vue';
+import { reactive } from 'vue';
 import AuthForm from '$blocks/components/ui/AuthForm.vue';
 import Group from '$blocks/components/ui/inputs/Group.vue';
 import TickCheckbox from '$blocks/components/ui/inputs/TickCheckbox.vue';
@@ -41,7 +41,7 @@ const auth = reactive({
 });
 
 const router = useRouter();
-console.log(authStore.user);
+
 const onSubmit = () => {
 
     return api.post('api/login', raw(auth), { withCredentials: true })
@@ -49,7 +49,7 @@ const onSubmit = () => {
             api.setBearer(data.token);
             data.isGuest = false;
             authStore.login(data);
-            // router.push(PLAY_PATH);
+            router.push(PLAY_PATH);
         });
 };
 </script>

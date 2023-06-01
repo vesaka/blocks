@@ -1,0 +1,44 @@
+{
+    "results": [
+        {
+            "id": 2948,
+            "score": 35,
+            "player": {
+                "id": 324,
+                "name": "Gabriella"
+            }
+        },
+        {
+            "id": 1093,
+            "score": 33,
+            "player": {
+                "id": 134,
+                "name": "Mark"
+            }
+        },
+        {
+            "id": 2948,
+            "score": 33,
+            "player": {
+                "id": 324,
+                "name": "Peter"
+            }
+        },
+        {
+            "id": 2948,
+            "score": 31,
+            "player": {
+                "id": 30,
+                "name": "Alice"
+            }
+        },
+        {
+            "id": 2948,
+            "score": 35,
+            "player": {
+                "id": 497,
+                "name": "Vivi"
+            }
+        }
+    ]
+}

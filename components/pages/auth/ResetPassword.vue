@@ -8,15 +8,13 @@
             </div>
             <template #footer>
                 <p>
-                    <RouterLink class="reg-play-link" :to="LOGIN_PATH" v-html="t('forgot-password.login', 'Login')">
-                    </RouterLink>
+                    <RouterLink class="reg-play-link" :to="LOGIN_PATH" v-html="t('forgot-password.login', 'Login')"/>
                 </p>
             </template>
             <template #redirect>
                 <h2 class="text-center" v-html="t('reset-password.onSucess')"></h2>
                 <p>
-                    <RouterLink class="reg-play-link" :to="LOGIN_PATH" v-html="t('forgot-password.login', 'Login')">
-                    </RouterLink>
+                    <RouterLink class="reg-play-link" :to="LOGIN_PATH" v-html="t('forgot-password.login', 'Login')"/>
                 </p>
             </template>
         </AuthForm>

@@ -1,7 +1,7 @@
 <template>
     <NightSky class="text-white font-lucky-guy">
 
-        <h2 class="text-white font-lucky-guy text-4xl z-10">Leaderboard</h2>
+        <h2 class="text-white font-lucky-guy text-4xl z-10" v-html="t('leaderboard.title')"></h2>
         <div class="flex flex-col z-10" v-if="players">
             <div class="flex flex-col" v-if="players.length > 0">
                 <div :class="rowClass" v-for="(item, i) in players">
@@ -10,7 +10,7 @@
                     <strong v-html="item.score"></strong>
                 </div>
             </div>
-            <div v-else>No Results Yet</div>
+            <div v-else v-html="t('leaderboard.empty')"></div>
         </div>
 
         <div class="flex flex-col md:flex-row mt-4">

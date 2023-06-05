@@ -1,5 +1,6 @@
 <template>
     <RouterView v-slot="{ Component }" v-if="ready">
+        <Drawer/>
         <AuthHeader/>
         <transition
              :enter-active-class="animate.enterActive"
@@ -16,13 +17,13 @@
 import { computed, ref } from 'vue';
 import { setLocales } from '$core/utils/i18n';
 import { useAuthStore } from '$blocks/bootstrap/stores';
-import { HEADER_GAME_NAME } from '$blocks/bootstrap/constants';
 import api from '$blocks/bootstrap/api.js';
 import en from '$blocks/assets/i18n/en.json';
 import env from '$blocks/bootstrap/imports.js';
 import { tween } from '$blocks/utils/tw/transitions';
 
 import AuthHeader from './components/ui/headers/AuthHeader.vue';
+import Drawer from './components/ui/headers/Drawer.vue';
 
 const animate = computed(() => {
     return tween('slide');

@@ -80,6 +80,7 @@
         "title": "Select Level",
         "level": "Level",
         "next": "Next Level",
+        "restart": "Restart Level",
         "result": {
             "good_job": "Good Job!",
             "welldone": "Weldone!",

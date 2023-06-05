@@ -41,8 +41,22 @@ const tweens = {
         enterActive: 'transition duration-300',
         leaveActive: 'transition duration-300'
     },
-
-
+    drawerLeft: {
+        enterActive: 'transform transition ease-in-out duration-500',
+        enterFrom: '-translate-x-full',
+        enterTo: 'translate-x-0',
+        leaveActive: 'transform transition ease-in-out duration-500 delay-100',
+        leaveFrom: 'translate-x-0',
+        leaveTo: '-translate-x-full'
+    },
+    drawerRight: {
+        enterActive: 'transform transition ease-in-out duration-500',
+        enterFrom: 'translate-x-full',
+        enterTo: 'translate-x-0',
+        leaveActive: 'transform transition ease-in-out duration-500 delay-100',
+        leaveFrom: 'translate-x-0',
+        leaveTo: 'translate-x-full'
+    }
 }
 
 export const tween = (name, extra = {}) => {

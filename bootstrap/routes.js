@@ -71,6 +71,7 @@ const routes = [
         component: Playground,
         meta: {
             title: 'Playground',
+            disableSwiping: true,
             redirects: {
                 [FREE_PLAY]: LEVELS_PATH,
                 [COMPETITION]: SUCCESS_PATH

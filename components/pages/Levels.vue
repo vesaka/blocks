@@ -1,8 +1,8 @@
 <template>
     <FireWorks>
-        <Card class="items-center lg:w-3/4 xl:w-1/2" :title="t('levels.title')">
+        <Card class="items-center lg:w-2/3 xl:w-1/2" :title="t('levels.title')">
             <template #header>
-                <Stars v-if="route.meta.justPlayed" class="absolute -top-24 z-10" :count="options.count"
+                <Stars v-if="route.meta.justPlayed" class="absolute -top-24 z-10 w-1/2 md:w-full" :count="options.count"
                     :inner-radius="options.innerRadius" :outer-radius="options.outerRadius" :beams="options.beams"
                     :score="store.level.stars / game.level.stars" />
             </template>
@@ -10,7 +10,7 @@
                 v-html="t('levels.result.good-job', 'Good Job!')"></h2>
             <div class="grid grid-cols-3 gap-1 md:grid-cols-5 md:gap-0 justify-center items-center content-center mx-auto">
                 <button v-for="level in levels" :class="btnLevel" @click="startLevel(level.current)">
-                    <span class="md:inline-flex text-white font-lucky-guy text-md text-2xl md:text-lg">
+                    <span class="md:inline-flex text-white font-lucky-guy text-md text-base sm:text-md md:text-lg">
                         <span v-html="t('levels.level')" class="mr-1 hidden md:inline-block"></span>
                         <span v-html="level.current" class="text-md"></span>
                     </span>
@@ -21,19 +21,25 @@
 
             </div>
         </Card>
+        <RouterLink :to="PLAY_PATH" class="absolute bottom-8 z-20">
+            <GameButton :content="t('levels.restart')"></GameButton>
+        </RouterLink>
+        
     </FireWorks>
 </template>
 <script setup>
 import { reactive, computed } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+
+import { t } from '$core/utils/i18n';
+import { game } from '$blocks/config/options.json';
+import { useGameStore } from '$blocks/bootstrap/stores';
+import { PLAY_PATH } from '$blocks/bootstrap/paths';
+
 import FireWorks from '$blocks/components/layouts/FireWorks.vue';
 import Card from '$blocks/components/ui/Card.vue';
 import Stars from '$blocks/components/ui/headers/Stars.vue';
-import { t } from '$core/utils/i18n';
-import { useGameStore } from '$blocks/bootstrap/stores';
-import { game } from '$blocks/config/options.json';
-import { useRouter, useRoute } from 'vue-router';
-import { PLAY_PATH } from '$blocks/bootstrap/paths';
-
+import GameButton from '$blocks/components//ui/GameButton.vue';
 
 const store = useGameStore();
 const router = useRouter();
@@ -52,7 +58,7 @@ const btnLevel = {
     'px-4 py-2 m-2': true,
     'bg-coconut': true,
     'border-2 border-jasperorange rounded-2xl': true,
-    'w-24 h-20 md:w-24 md:h-20 sm:w-auto': true,
+    'w-16 h-14 md:w-24 md:h-20 sm:w-auto': true,
     'flex flex-col items-center content-center justify-center': true,
     'transition duration-300 hover:scale-110': true
 };

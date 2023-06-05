@@ -1,5 +1,5 @@
 <template>
-    <div :class="tw(container, 'relative mt-16')">
+    <div :class="tw(container, 'relative mt-36 lg:mt-16')">
         <div :class="cardClass" style="transform: perspective(100px) rotateX(-2deg);">
             <div :class="innerCard"></div>
         </div>

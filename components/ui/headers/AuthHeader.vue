@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row w-1/2 md:w-1/6 absolute top-0 right-0 items-end px-8 py-2 z-10">
+    <div class="flex flex-row w-full md:w-1/6 gap-2 absolute top-0 right-0 justify-center items-center md:items-end mx-0 md:mx-8 my-2 z-10">
         <FullscreenButton/>
         <AudioButton/>
         <AuthButton/>  

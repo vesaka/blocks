@@ -34,7 +34,7 @@ describe('User', () => {
     it('can see top scores', () => {
         wrapper = createWrapper(fixtures.results);
         setTimeout(() => {
-            expect(wrapper.html()).not.toContain(t('leaderboard.empty'));
+            expect(wrapper.html(), 'No results found').not.toContain(t('leaderboard.empty'));
         }, 300);
     })
 });

@@ -1,6 +1,6 @@
 <template>
     <NightSky>
-        <Card title="Login" class="mt-20 p-12 md:h-2/3 w-10/12 md:w-1/2 mx-auto z-10 text-coconut">
+        <Card :title="title" class="mt-20 p-12 md:h-2/3 w-10/12 md:w-1/2 mx-auto z-10 text-coconut">
             <Transition name="fade">
                 <form :class="formClass" @submit.prevent="onSubmit" novalidate v-if="!didSubmit">
                     <slot></slot>
@@ -35,16 +35,13 @@
 </template>
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { t } from '$core/utils/i18n';
-import { isObject } from '$core/utils/object';
+import { parse422 } from '$core/utils/errors';
 import { useErrorStore } from '$blocks/bootstrap/stores';
 import Card from '$blocks/components/ui/Card.vue';
 import GameButton from './GameButton.vue';
 import NightSky from '$blocks/components/ui/NightSky.vue';
 const errors = useErrorStore();
 
-const router = useRouter();
 let loading = ref(false);
 let submitted = ref(false);
 let error = ref('');
@@ -58,7 +55,7 @@ const props = defineProps({
         type: String,
         default: ''
     },
-    formTitle: {
+    title: {
         type: String,
         default: ''
     },
@@ -86,20 +83,10 @@ const onSubmit = () => {
     props.submit().then(() => {
         submitted.value = true;
     }).catch(({ response }) => {
-        if ((422 === response.status)) {
-            const newErrors = {};
-            for (let name in response.data.errors) {
-                const error = response.data.errors[name];
-                const rule = isObject(error[0]) ? error[0].rule : error[0]; 
-                newErrors[name] = t(`messages.${name}.${rule}`)
-            }
-            console.log(response.data, newErrors);
-            errors.update(newErrors);
-        }
-    })
-        .then(() => {
-            loading.value = false
-        })
+        errors.update(parse422(response));
+    }).then(() => {
+        loading.value = false
+    });
 };
 
 const displayError = computed(() => { return error.value; });

@@ -137,7 +137,7 @@
             "not_same": "Passwords do not match"
         },
         "accept": {
-            "required": "Please accept terms and conditions"
+            "accepted": "Please accept terms and conditions"
         }
     }
 }

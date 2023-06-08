@@ -121,17 +121,24 @@
         },
         "name": {
             "required": "Username is required",
-            "min": "Username should be {minimum} characters at least"
+            "min": "Username should be {minimum} characters at least",
+            "unique": "Username was already taken",
+            "alphanum": "Username should be alphanumeric"
         },
         "email": {
             "required": "Email is required",
             "invalid": "Email is invalid",
             "exists": "Email was already taken",
-            "not_found": "User not found or wrong password"
+            "not_found": "User not found or wrong password",
+            "unique": "Email was already taken",
+            "max": "Email should be {0} characters at most"
         },
         "password": {
             "required": "Password is required",
-            "minimum": "Password should be {minimum} characters at least"
+            "minimum": "Password should be {minimum} characters at least",
+            "min": "Password should be {0} characters at least",
+            "same": "Passwords do not match",
+            "max": "Password should be {0} characters at most"
         },
         "password_confirmation": {
             "not_same": "Passwords do not match"

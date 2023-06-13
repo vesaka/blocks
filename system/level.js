@@ -52,7 +52,7 @@ class Level extends Container {
                 y: block.col  
             });
 
-
+            this.$emit('move_end');
         }
     }
 

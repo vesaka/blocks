@@ -3,11 +3,13 @@ import {
     PerspectiveCamera, Clock, HemisphereLight
 } from 'three';
 
+import AudioLoader from '$core/3d/extensions/loaders/audio-loader.js';
 import Box from '$blocks/models/box';
 import Cell from '$blocks/models/cells/cell';
 import Pointer from '$blocks/system/pointer';
 import Level from '$blocks/system/level';
 import Bot from '$blocks/system/bot';
+import Audio from '$blocks/system/audio';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
 import HistoryMixin from '$core/mixins/history-mixin';
@@ -27,13 +29,18 @@ class BlocksGame extends Game3D {
         this.$set('box', new Box(this.options.models));
         this.add(this.box);
         
-        this.loaders = {ttf: TTFLoader};
+        this.loaders = {
+            ttf: TTFLoader,
+            '{wav,ogg}': AudioLoader,
+        };
         
         this.createLights();
         
         const pointer = new Pointer({
             mixins: [HistoryMixin]
         });
+
+        const audio = new Audio();
 
         this.$set('$level', new Level({
             mixins: [HistoryMixin]

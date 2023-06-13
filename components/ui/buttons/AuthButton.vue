@@ -6,7 +6,7 @@
     </button>
 </template>
 <script setup>
-import { link } from '$blocks/utils/tw/button.tw';
+
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '$blocks/bootstrap/stores';
 import router from '$blocks/bootstrap/router';

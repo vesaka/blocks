@@ -1,6 +1,5 @@
 <template>
     <RouterView v-slot="{ Component }" v-if="ready">
-        <Drawer/>
         <AuthHeader/>
         <transition
              :enter-active-class="animate.enterActive"
@@ -23,7 +22,6 @@ import env from '$blocks/bootstrap/imports.js';
 import { tween } from '$blocks/utils/tw/transitions';
 
 import AuthHeader from './components/ui/headers/AuthHeader.vue';
-import Drawer from './components/ui/headers/Drawer.vue';
 
 const animate = computed(() => {
     return tween('slide');
@@ -39,10 +37,9 @@ api.connect({
     }  
 }).then(() => {
     api.setBearer(auth.user.token)
-        .setDefaultParams({_gk: env.VITE_GAME_KEY})
         .get('api/player')
         .catch(err => {
-            if (401 === err.response.status) {
+            if (401 === err.response.status && auth.loggedIn) {
                 auth.logout();
             }
         });

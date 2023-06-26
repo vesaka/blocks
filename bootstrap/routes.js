@@ -2,7 +2,6 @@ import Login from '$blocks/components/pages/auth/Login.vue';
 import SignUp from '$blocks/components/pages/auth/SignUp.vue';
 import ForgotPassword from '$blocks/components/pages/auth/ForgotPassword.vue';
 import ResetPassword from '$blocks/components/pages/auth/ResetPassword.vue';
-import Playground from '$blocks/components/pages/Playground.vue';
 import Leaderboard from '$blocks/components/pages/Leaderboard.vue';
 import Start from '$blocks/components/pages/Start.vue';
 import NotFound from '$blocks/components/pages/NotFound.vue';
@@ -68,7 +67,7 @@ const routes = [
     {
         path: PLAY_PATH,
         name: 'playground',
-        component: Playground,
+        component: import('$blocks/components/pages/Playground.vue'),
         meta: {
             title: 'Playground',
             disableSwiping: true,

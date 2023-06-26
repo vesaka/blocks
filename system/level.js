@@ -16,14 +16,14 @@ class Level extends Container {
 
         this.startAt = null;
         this.session = {}
+
+        
     }
 
     load(levelNumber = 1) {
-        const { level } = this.options.game;
-        const levelMoves = level.moves.initial + level.moves.byLevel * (levelNumber - 1);
-        const board = raw(boards.find(({ solution }) => solution.length === levelMoves));
+        const board = raw(boards[levelNumber - 1]);
         board.blocks = board.blocks.map(unserialize);
-        this.$store.startLevel(levelNumber, levelMoves);
+        this.$store.startLevel(levelNumber, board.moves);
         this.$emit('level_loaded', board);
 
         api.post('api/play/start')
@@ -83,6 +83,7 @@ class Level extends Container {
         this.$emit('level_end');
         this.$store.state = FINISHED;
     }
+
 }
 
 export default Level;

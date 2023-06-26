@@ -1,5 +1,6 @@
 import Container from '$core/container';
 import { unserialize } from '$core/utils/object';
+import { boards } from '$blocks/config/puzzles-all.json';
 import Cell from '$blocks/models/cells/cell';
 class Bot extends Container {
     constructor() {
@@ -12,8 +13,8 @@ class Bot extends Container {
     }
 
     level_loaded(board) {
-
-        this.moves = board.solution.map(unserialize);
+        const currentBoard = boards.find(({name}) => name === board.name);
+        this.moves = currentBoard.solution.map(unserialize);
         
     }
 
@@ -33,7 +34,7 @@ class Bot extends Container {
                 block.release();
                 if (i === (moves.length - 1)) {
                     block.model.position.x += 2 * Cell.def.size;
-                    block.block_released();
+                    block.block_released(block);
                 }
                 //this.$emit('block_released', block);
             }, 250)

@@ -7,7 +7,7 @@ import Box from '$blocks/models/box';
 import Cell from '$blocks/models/cells/cell';
 import Pointer from '$blocks/system/pointer';
 import Level from '$blocks/system/level';
-import Bot from '$blocks/system/bot';
+//import Bot from '$blocks/system/bot';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
 import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
 import HistoryMixin from '$core/mixins/history-mixin';
@@ -39,9 +39,9 @@ class BlocksGame extends Game3D {
             mixins: [HistoryMixin]
         }));
 
-        if (this.settings.bot) {
-            this.$set('$bot', new Bot);
-        }
+        // if (this.settings.bot) {
+        //     this.$set('$bot', new Bot);
+        // }
 
     }
 

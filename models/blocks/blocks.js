@@ -1,7 +1,6 @@
 import Collection from '$core/models/collection';
 import { Raycaster, Vector2 } from 'three';
 
-
 import StatesMixin from '$core/mixins/states-mixin';
 import HistoryMixin from '$core/mixins/history-mixin';
 import { extend, raw, unserialize } from '$core/utils/object';
@@ -10,9 +9,8 @@ import { rand } from '$core/utils/math';
 import MainBlock from './main-block';
 import HorizontalBlock from './horizontal-block';
 import VerticalBlock from './vertical-block';
-import { DragControls } from 'three/addons/controls/DragControls.js';
 import { boards } from '$blocks/config/puzzles.json';
-import gsap from 'gsap';
+import { TimelineMax  } from 'gsap/all ';
 
 const MAP = {
     main: MainBlock,
@@ -35,9 +33,6 @@ class Blocks extends Collection {
         this.ray = new Vector2;
         this.raycaster = new Raycaster;
         this.activeBlock = null;
-        //this.placeItems();
-
-
     }
 
     createItems() {
@@ -68,18 +63,15 @@ class Blocks extends Collection {
 
 
         }
-        console.log(draggableBlocks);
     }
 
     placeItems() {
         const board = boards.find(({ solution }) => solution.length == 1);
-
         board.blocks.forEach(b => this.createItem(unserialize(b)));
-
     }
 
     arrangeItems(board) {
-        const { box, screen } = this;
+        const { box } = this;
 
         board.blocks.forEach(item => { 
             const block = this.createItem(item);
@@ -87,20 +79,19 @@ class Blocks extends Collection {
             box.model.add(block.model);
          });
 
-         const tl = gsap.timeline({
+         const tl = new TimelineMax({
             repeat: 0,
             duration: 1,
             onComplete: () => {
                 this.$emit('level_start')
             }
-         })
+        });
 
          this.each(item => {
             tl.to(item.model.position, {
                 z: item.position.z,
                 
             }, '>-0.45')
-            
          });
     }
 
@@ -157,10 +148,6 @@ class Blocks extends Collection {
         if (this.activeBlock) {
             this.activeBlock.grab(cross);
         }
-    }
-
-    pointer_drag() {
-
     }
 
     pointer_stop(point) {

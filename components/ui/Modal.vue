@@ -43,8 +43,7 @@
     </transition>
 </template>
 <script setup>
-    import { computed, ref, onMounted, watch } from 'vue';
-    import { t } from '$core/utils/i18n';
+    import { ref, onMounted, watch } from 'vue';
     import { tw }  from '$blocks/utils/tw';
     import * as md from '$blocks/utils/tw/modal.tw';
 

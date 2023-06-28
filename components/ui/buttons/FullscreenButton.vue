@@ -5,7 +5,7 @@
     </button>
 </template>
 <script setup>
-import { ref, reactive, computed, nextTick } from 'vue';
+import { ref } from 'vue';
 import { icon } from '$blocks/utils/tw/button.tw';
 import { toggleFullscreen, isFullscreen } from '$core/utils/fullscreen';
 
@@ -20,13 +20,11 @@ const full = ref(false);
 const toggle = (ev) => {
     const root = ev.target.closest('#app');
     toggleFullscreen(root);
-
     
     setTimeout(() => {
         full.value = isFullscreen(); 
         console.log(isFullscreen());
     }, 500)
 }
-
 
 </script>

@@ -20,10 +20,10 @@
     import options from '$blocks/config/options.json';
     import settings from '$blocks/config/settings.json';
     import assets from '$blocks/config/assets.json';
-    import { FINISHED, FREE_PLAY, COMPETITION } from '$blocks/bootstrap/constants';
-    import { LEVELS_PATH, SUCCESS_PATH } from '$blocks/bootstrap/paths';
+    import { FINISHED } from '$blocks/bootstrap/constants';
     import { useGameStore, useAuthStore } from '$blocks/bootstrap/stores.js';
-    
+    import { LEVELS_PATH } from '$blocks/bootstrap/paths.js';
+
     const store = useGameStore();
     const router = useRouter();
     const route = useRoute();
@@ -31,18 +31,12 @@
     let game = null;
 
     watch(() => store.state, (state) => {
-        console.log(state);
         if (FINISHED === state) {
             const { redirects } = route.meta;
+            router.push(LEVELS_PATH);
+        }     
+    });
 
-            if (redirects[store.mode]) {
-                router.push(redirects[store.mode]);
-            }
-        }
-
-        
-
-    })
     onMounted(() => {
         game = new BlocksGame({
             canvas: canvas.value,

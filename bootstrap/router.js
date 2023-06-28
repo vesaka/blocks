@@ -1,5 +1,5 @@
 import { nextTick } from 'vue';
-import { createRouter, createWebHashHistory, createWebHistory  } from 'vue-router';
+import { createRouter, createWebHistory  } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useAuthStore } from './stores';
 import { BASE, PAGE_404, LOGIN_PATH } from './paths';

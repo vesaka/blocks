@@ -38,35 +38,24 @@
         </AuthForm>
 </template>
 <script setup>
-import { reactive, ref, computed, watch } from 'vue';
+import { reactive, watch } from 'vue';
 import AuthForm from '$blocks/components/ui/AuthForm.vue';
 import Group from '$blocks/components/ui/inputs/Group.vue';
 import TickCheckbox from '$blocks/components/ui/inputs/TickCheckbox.vue';
 import api from '$core/services/express-spa-api.js';
-import { useRouter } from 'vue-router';
-import { svg, PLAY_PATH, LOGIN_PATH } from '$blocks/bootstrap/paths.js'
+import { PLAY_PATH, LOGIN_PATH } from '$blocks/bootstrap/paths.js'
 import { t } from '$core/utils/i18n';
 
 import { useErrorStore } from '$blocks/bootstrap/stores';
 const errors = useErrorStore();
 
-
-
-   const auth = reactive({
-       name: 'vesaka',
-       email: 'vesakabgr@gmail.com',
-       password: '12345678',
-       password_confirmation: '12345678',
-       accept: true
-   });
-
-// const auth = reactive({
-//     name: '',
-//     email: '',
-//     password: '',
-//     password_confirmation: '',
-//     accept: false
-// });
+const auth = reactive({
+    name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    accept: true
+});
 
 const inputClass = {'mx-auto md:w-10/12 lg:w-full': true};
 
@@ -75,13 +64,6 @@ watch(() => auth.accept, (c) => {
 })
 
 const onSubmit = () => {
-    //        return new Promise((done, fail) => {
-    //            setTimeout(done, 2000);
-    //        }).then(() => {
-    //            console.log('SUBMITED');
-    //        }).catch(() => {
-    //            console.log('FAIL');
-    //        });
     return api.post('api/register', auth);
 };
 

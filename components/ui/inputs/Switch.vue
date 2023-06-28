@@ -14,7 +14,7 @@
     </label>
 </template>
 <script setup>
-    import { reactive, ref, computed, onMounted  } from 'vue';
+    import { ref, computed, onMounted  } from 'vue';
     const $emit = defineEmits(['update:modelValue', 'change']);
     let checked = ref(false);
 

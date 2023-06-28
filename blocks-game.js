@@ -9,7 +9,7 @@ import Pointer from '$blocks/system/pointer';
 import Level from '$blocks/system/level';
 //import Bot from '$blocks/system/bot';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
+//import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
 import HistoryMixin from '$core/mixins/history-mixin';
 
 class BlocksGame extends Game3D {
@@ -62,11 +62,11 @@ class BlocksGame extends Game3D {
         renderer.shadowMap.enabled = true;
         renderer.setClearColor( 0x111111, 1 );
 
-        if (this.settings.controls) {
-            useOrbitControls(this);
-        } else {
+        // if (this.settings.controls) {
+        //     useOrbitControls(this);
+        // } else {
             this.camera.lookAt(0, 250, -180);
-        }
+        //}
 
     }
     

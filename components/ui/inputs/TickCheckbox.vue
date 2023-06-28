@@ -30,8 +30,6 @@ const onChange = ev => {
 
 const boxClass = computed(() => ({
     'box mr-4 flex h-8 w-8 items-center justify-center rounded-full border-4 border-coconut p-1': true,
-    // 'border-gray-500': !checked.value,
-    // 'border-coconut': checked.value
 }));
 
 const checkClass = computed(() => ({
@@ -59,6 +57,5 @@ const props = defineProps({
 onMounted(() => {
     checked.value = props.modelValue;
 })
-
 
 </script>

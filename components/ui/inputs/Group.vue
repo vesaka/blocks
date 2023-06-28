@@ -16,7 +16,6 @@
     </div>
 </template>
 <script setup>
-    import { onMounted } from 'vue';
     import { tw } from '$blocks/utils/tw';
     import { input } from '$blocks/utils/tw/input.tw';
     import { invalid } from '$blocks/utils/tw/form.tw';

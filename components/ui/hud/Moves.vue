@@ -1,34 +1,29 @@
 <template>
     <Display label="Moves">
-        <strong ref="counter" v-html="moves"></strong>
+        <strong ref="counter" v-html="store.level.moves"></strong>
     </Display>
 </template>
 <script setup>
 import { watch, computed, ref } from 'vue';
 import Display from './Display.vue';
-import { useGame } from '$blocks/utils/game.util';
-import { game } from '$blocks/config/options.json';
-import gsap from 'gsap';
+import { useGameStore } from '$blocks/bootstrap/stores.js';
+import { TimelineMax  } from 'gsap/all ';
 
 const counter = ref(null);
-const { gameStore } = useGame();
-let moves = computed(() => gameStore.level.moves);
-watch(() => gameStore.level.moves, n => {
-    //moves = n;
-    const tl  = gsap.timeline({defaults: {
+const store = useGameStore();
+
+const timeline = new TimelineMax ({
+    defaults: {
         duration: 0.3,
         repeat: 0
-    }})
-    .to(counter.value, {
+    }
+});
+watch(() => store.level.moves, () => {
+    timeline.to(counter.value, {
         scale: 2
-    })
-    .add(() => {
-        moves = n
     })
     .to(counter.value, {
         scale: 1
     })
-
 } );
-
 </script>

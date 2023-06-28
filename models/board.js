@@ -2,7 +2,8 @@ import Model from '$core/3d/models/three-model';
 import { Object3D, Mesh, BoxGeometry, MeshPhongMaterial, Box3 } from 'three';
 import Cell from './cells/board-cell';
 import { extend } from '$core/utils/object';
-import gsap from 'gsap';
+import { TimelineMax  } from 'gsap/all ';
+
 class Board extends Model {
 
     slots = [];
@@ -48,21 +49,19 @@ class Board extends Model {
         
     }
 
-    shuffleLabels() {
-        
-    }
-
     show(onComplete) {
+        const tl = new TimelineMax({
+            repeat: 0,
+            ease: 'elastic',
+            onComplete
+        });
+
         const { model, table, goal } = this;
         model.position.x = table.width * 0.5;
         model.position.y = table.height * 0.5;
 
         goal.model.position.x += goal.size.width*4; 
-        const tl = gsap.timeline({
-            repeat: 0,
-            ease: 'elastic',
-            onComplete
-        });
+
         tl.add('showBoard')
             .add('addBlocks')
             .to(model.scale, {
@@ -77,15 +76,6 @@ class Board extends Model {
             .to(goal.model.position, {
                 x: goal.position.x
             }, '>addBlocks');
-
-        
-        
-        
-
-    }
-
-    hide() {
-
     }
 }
 

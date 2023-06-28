@@ -2,9 +2,8 @@ import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import Start from '$blocks/components/pages/Start.vue';
 import pinia from '$blocks/bootstrap/pinia';
-import router, { routes } from '$blocks/bootstrap/router';
-import { createRouter, createWebHistory } from 'vue-router'
-import { PLAY_PATH, LEVELS_PATH, LOGIN_PATH, BASE } from '$blocks/bootstrap/paths';
+import router from '$blocks/bootstrap/router';
+import { PLAY_PATH, LEVELS_PATH, LOGIN_PATH } from '$blocks/bootstrap/paths';
 
 const mountOptions = {
     global: {

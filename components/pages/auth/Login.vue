@@ -1,5 +1,5 @@
 <template>
-        <AuthForm name="login-form" :submit="onSubmit" form-title="Login">
+        <AuthForm title="Log In" name="login-form" :submit="onSubmit" form-title="Login">
             <div class="form-group">
                 <Group :placeholder="t('login.name.placeholder')" name="email" type="text" v-model="auth.email"></Group>
                 <Group :placeholder="t('login.password.placeholder')" name="password" type="password" v-model="auth.password"></Group>

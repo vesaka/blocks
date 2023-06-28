@@ -3,13 +3,13 @@ import {
     PerspectiveCamera, Clock, HemisphereLight
 } from 'three';
 
+import AudioLoader from '$core/3d/extensions/loaders/audio-loader.js';
 import Box from '$blocks/models/box';
 import Cell from '$blocks/models/cells/cell';
 import Pointer from '$blocks/system/pointer';
 import Level from '$blocks/system/level';
-//import Bot from '$blocks/system/bot';
+import Audio from '$blocks/system/audio';
 import { TTFLoader } from 'three/examples/jsm/loaders/TTFLoader';
-//import { useOrbitControls } from '$core/3d/mixins/orbit-controls-mixin.js';
 import HistoryMixin from '$core/mixins/history-mixin';
 
 class BlocksGame extends Game3D {
@@ -27,7 +27,10 @@ class BlocksGame extends Game3D {
         this.$set('box', new Box(this.options.models));
         this.add(this.box);
         
-        this.loaders = {ttf: TTFLoader};
+        this.loaders = {
+            ttf: TTFLoader,
+            '{wav,ogg}': AudioLoader,
+        };
         
         this.createLights();
         
@@ -35,13 +38,11 @@ class BlocksGame extends Game3D {
             mixins: [HistoryMixin]
         });
 
+        const audio = new Audio();
+
         this.$set('$level', new Level({
             mixins: [HistoryMixin]
         }));
-
-        // if (this.settings.bot) {
-        //     this.$set('$bot', new Bot);
-        // }
 
     }
 
@@ -62,11 +63,8 @@ class BlocksGame extends Game3D {
         renderer.shadowMap.enabled = true;
         renderer.setClearColor( 0x111111, 1 );
 
-        // if (this.settings.controls) {
-        //     useOrbitControls(this);
-        // } else {
-            this.camera.lookAt(0, 250, -180);
-        //}
+        this.camera.lookAt(0, 250, -180);
+        
 
     }
     

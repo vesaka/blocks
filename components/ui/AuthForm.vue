@@ -35,9 +35,7 @@
 </template>
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
-import { t } from '$core/utils/i18n';
-import { isObject } from '$core/utils/object';
+import { parse422 } from '$core/utils/errors';
 import { useErrorStore } from '$blocks/bootstrap/stores';
 import Card from '$blocks/components/ui/Card.vue';
 import GameButton from './GameButton.vue';
@@ -81,19 +79,10 @@ const onSubmit = () => {
     props.submit().then(() => {
         submitted.value = true;
     }).catch(({ response }) => {
-        if ((422 === response.status)) {
-            const newErrors = {};
-            for (let name in response.data.errors) {
-                const error = response.data.errors[name];
-                const rule = isObject(error[0]) ? error[0].rule : error[0]; 
-                newErrors[name] = t(`messages.${name}.${rule}`)
-            }
-            errors.update(newErrors);
-        }
-    })
-        .then(() => {
-            loading.value = false
-        })
+        errors.update(parse422(response));
+    }).then(() => {
+        loading.value = false
+    });
 };
 
 const displayError = computed(() => { return error.value; });

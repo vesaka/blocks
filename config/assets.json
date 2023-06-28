@@ -1,5 +1,9 @@
 {
     "font": {
         "lucky": "assets/fonts/LuckiestGuy.ttf"
+    },
+    "audio": {
+        "tak": "assets/audio/tak.{wav,ogg}",
+        "success": "assets/audio/success.{wav,ogg}"
     }
 }

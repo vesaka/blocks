@@ -1,44 +1,19 @@
 {
-    "title": "The Action Blocks",
-    "ui": {
-        "score": "Score",
-        "best_score": "Best Score",
-        "level": "Level",
-        "energy": "Energy",
-        "buttons": {
-            "restart": "Restart"
-        },
-        "button": {
-            "start": "Start",
-            "pause": "Pause",
-            "level": "Next Level"
-        }
-    },
-    "menu": {
-        "play-now": "Play Now",
-        "create-game": "Create Board",
-        "search-games": "Join a game",
-        "leaderboard": "Leaderboard"
-    },
+    "title": "Unblock Me",
     "home": {
         "btn": {
             "play-as-guest": "Play as guest",
             "login": "Login",
-            "free-play": "Free Play",
             "play": "Play",
-            "select": "Select Level", 
-            "settings": "Settings"
+            "select": "Select Level"
         },
-        "no-account": "No Account?",
         "register": "Sign Up"
     },
     "sign-up": {
-        "details": "Drop your details below<br>to join the leaderboard",
-        "register": "Register",
+        "title": "Sign Up",
         "login": "Login",
         "as-guest": "Play as guest",
-        "play": "Play game",
-        "check": "Please check you email to confirm your registration",
+        "check": "Please check your email to confirm your registration",
         "thank-you": "Thank you for registering",
         "name": {
             "placeholder": "Enter your username"
@@ -55,12 +30,8 @@
     },
     "login": {
         "title": "Login to Play",
-        "play": "Play Game",
-        "with-account": "Have an Account? Click Here",
-        "register": "register",
-        "login": "login",
-        "remember-me": "remember me",
-        "as-guest": "play as guest",
+        "with-account": "Sign up",
+        "remember-me": "Remember me",
         "forgot-password": "forgot your password?",
         "name": {
             "placeholder": "username"
@@ -73,25 +44,21 @@
         "text": "Logout"
     },
     "thank-you": {
-        "title": "thank you<br>for registering",
-        "play": "play game"
+        "title": "Thank you<br>for registering",
+        "play": "Play game"
     },
     "levels": {
         "title": "Select Level",
         "level": "Level",
-        "next": "Next Level",
         "restart": "Restart Level",
         "result": {
-            "good_job": "Good Job!",
-            "welldone": "Weldone!",
-            "excellent": "Excellent!",
-            "fantastic": "Fantastic"
+            "good_job": "Good Job!"
         }
     },
     "leaderboard": {
         "title": "Leaderboard",
         "empty": "No results yet",
-        "play": "play again",
+        "play": "Play again",
         "restart": "Restart Level",
         "select": "Select Level",
         "headers": {
@@ -102,16 +69,16 @@
     },
     "forgot-password": {
         "title": "Forgot password?",
-        "submit": "submit",
+        "submit": "Submit",
         "check": "Please, check your email<br/> for a password reset link"
     },
     "reset-password": {
         "title": "Reset password?",
-        "submit": "submit"
+        "submit": "Submit"
     },
     "404": {
-        "not-exists": "this page does not exist",
-        "back": "go back"
+        "not-exists": "Page not found",
+        "back": "Back"
     },
     "messages": {
         "user": {

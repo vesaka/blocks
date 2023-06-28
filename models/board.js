@@ -1,5 +1,5 @@
 import Model from '$core/3d/models/three-model';
-import { Object3D, Mesh, BoxGeometry, MeshPhongMaterial, Box3 } from 'three';
+import { Object3D, Box3 } from 'three';
 import Cell from './cells/board-cell';
 import { extend } from '$core/utils/object';
 import { TimelineMax  } from 'gsap/all ';

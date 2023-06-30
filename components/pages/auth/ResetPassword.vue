@@ -1,7 +1,7 @@
 <template>
         <AuthForm name="login-form" title-image="Reset Password" :submit="onSubmit" :auth="auth">
             <div class="form-group">
-                <Group type="password" :placeholder="t('reset-password.password.placeholder')" v-model="auth.password"
+                <Group type="password" name="password" :placeholder="t('reset-password.password.placeholder')" v-model="auth.password"
                     autocomplete="new-password" />
                 <Group type="password" :placeholder="t('reset-password.password.placeholder')"
                     v-model="auth.password_confirmation" autocomplete="new-password" />
@@ -33,7 +33,7 @@ const route = useRoute();
 
 const auth = reactive({
     email: route.query.email,
-    token: route.params.token,
+    token: route.query.token,
     password: '',
     password_confirmation: ''
 });

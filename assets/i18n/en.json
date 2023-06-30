@@ -105,7 +105,9 @@
             "minimum": "Password should be {minimum} characters at least",
             "min": "Password should be {0} characters at least",
             "same": "Passwords do not match",
-            "max": "Password should be {0} characters at most"
+            "confirmed": "Passwords do not match",
+            "max": "Password should be {0} characters at most",
+            "token": "Invalid token"
         },
         "password_confirmation": {
             "not_same": "Passwords do not match"
